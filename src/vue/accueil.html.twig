@@ -1,0 +1,155 @@
+{% extends "base.html.twig" %}
+{% block title %} {{ parent() }} Accueil {% endblock %}
+{% block contenu %}
+
+<body class="light-theme">
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="nav-logo">
+                    <img src="img/logo.webp" alt="Logo" class="logo">
+                    <span>Persona WORLD</span>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="index.php?page=accueil" class="active">Accueil</a>
+                    <a href="#products">Boutique</a>
+                    <a href="index.php?page=connexion">Connexion</a>
+                    <a href="index.php?page=inscrire">Inscription</a>
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Bienvenue dans le Metaverse</h1>
+            <p>Une sélection inspirée par la licence Shin Megami Tensei : Persona</p>
+            <a href="#products" class="cta-button">Explorer les trésors</a>
+        </div>
+    </header>
+
+    <section class="categories">
+        <div class="container">
+            <h2>Catégories</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <img src="img/bannerfigure.jpg" alt="Figurines">
+                    <h3>Figurines</h3>
+                </div>
+                <div class="category-card">
+                    <img src="img/bannervetement.png" alt="Vêtements">
+                    <h3>Vêtements</h3>
+                </div>
+                <div class="category-card">
+                    <img src="img/banneraccessoire.jpg" alt="Accessoires">
+                    <h3>Accessoires</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="products">
+        <div class="container">
+            <h2>En vedette</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-badge">Nouveau</div>
+                    <img src="img/joker figure.jpg" alt="Joker Figure">
+                    <div class="product-info">
+                        <h3>Joker - Collector</h3>
+                        <p class="price">45.99 €</p>
+                        <div class="product-actions">
+                            <button class="add-to-cart">Ajouter au panier</button>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-badge">Exclusif</div>
+                    <img src="img/arsene figure.webp" alt="Arsène Figure">
+                    <div class="product-info">
+                        <h3>Arsène - Édition Limitée</h3>
+                        <p class="price">59.99 €</p>
+                        <div class="product-actions">
+                            <button class="add-to-cart">Ajouter au panier</button>
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="container">
+            <h2>Newsletter Velvet</h2>
+            <p>Reçois les actus, drops et promotions Persona</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="adresse@email.com">
+                <button type="submit">S'inscrire</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>À propos</h3>
+                    <p>Projet hommage non officiel à l'univers Persona. Créé par des fans, pour les fans.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="#products">Produits</a></li>
+                        <li><a href="index.php?page=connexion">Connexion</a></li>
+                        <li><a href="index.php?page=inscrire">Inscription</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@velvetmail.com</li>
+                        <li><i class="fas fa-phone"></i> +33 7 00 00 00 00</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Réseaux ( à venir )</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Persona WORLD. Tous droits réservés.</p>
+                <div class="footer-links">
+                    <a href="#">Mentions légales</a>
+                    <a href="#">Confidentialité</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            const icon = themeToggle.querySelector('i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        });
+    </script>
+</body>
+{% endblock %}
