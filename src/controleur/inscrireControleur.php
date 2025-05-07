@@ -8,7 +8,7 @@ function inscrireControleur($twig) : void {
         $inputPassword2 = $_POST['inputPassword2'];
         $nom            = htmlspecialchars($_POST['nom']);
         $prenom         = htmlspecialchars($_POST['prenom']);
-        $nuser          = htmlspecialchars($_POST['inputPseudo']);
+        $nuser          = htmlspecialchars($_POST['nuser']);
         $role           = $_POST['role'];
 
         

@@ -2,33 +2,6 @@
 {% block title %} {{ parent() }} Accueil {% endblock %}
 {% block contenu %}
 
-<body class="light-theme">
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-left">
-                <div class="nav-logo">
-                    <img src="img/logo.webp" alt="Logo" class="logo">
-                    <span>Persona WORLD</span>
-                </div>
-            </div>
-            <div class="nav-right">
-                <div class="nav-links">
-                    <a href="index.php?page=accueil" class="active">Accueil</a>
-                    <a href="#products">Boutique</a>
-                    <a href="index.php?page=connexion">Connexion</a>
-                    <a href="index.php?page=inscrire">Inscription</a>
-                    <button class="theme-toggle" id="themeToggle">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                    <div class="cart-icon">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count">0</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <header class="hero">
         <div class="hero-content">
             <h1>Bienvenue dans le Metaverse</h1>
@@ -36,6 +9,19 @@
             <a href="#products" class="cta-button">Explorer les trésors</a>
         </div>
     </header>
+  
+    
+            {% if session.login is defined %}
+        <div class="alert alert-light text-center mt-4">
+            Connecté en tant que <strong>{{ session.nuser }}</strong>
+            {% if session.role == 1 %}
+            (Administrateur)
+            {% elseif session.role == 0 %}
+            (Client)
+            {% endif %}
+        </div>
+        {% endif %}
+
 
     <section class="categories">
         <div class="container">
@@ -111,8 +97,11 @@
                     <h3>Navigation</h3>
                     <ul>
                         <li><a href="#products">Produits</a></li>
-                        <li><a href="index.php?page=connexion">Connexion</a></li>
-                        <li><a href="index.php?page=inscrire">Inscription</a></li>
+                    {% if session.login is not defined %}
+                    <li><a href="index.php?page=connexion">Connexion</a></li>
+                    <li><a href="index.php?page=inscrire">Inscription</a></li>
+                    {% endif %}
+
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -142,14 +131,17 @@
     </footer>
 
     <script>
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-theme');
-            const icon = themeToggle.querySelector('i');
-            icon.classList.toggle('fa-moon');
-            icon.classList.toggle('fa-sun');
-        });
+            const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        const icon = themeToggle.querySelector('i');
+        if (icon) {
+        icon.classList.toggle('fa-moon');
+        icon.classList.toggle('fa-sun');
+        }
+    });
+    }
+
     </script>
-</body>
 {% endblock %}

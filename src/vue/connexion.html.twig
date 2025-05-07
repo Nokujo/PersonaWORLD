@@ -9,15 +9,14 @@
                 <div class="col-md-8 col-lg-6">
                     <div class="card bg-dark text-light shadow-lg border-0 animate__animated animate__fadeIn">
                         <div class="card-body text-center py-5">
-                            <h1 class="display-4 mb-4" style="color: var(--accent-color);">🎉 Connexion réussie</h1>
+                            <h1 class="display-4 mb-4" style="color: var(--accent-color);">Connexion réussie</h1>
 
-                            <p class="lead mb-2">Bienvenue, </p>
-                            {% if form.role == 1 %}
-                                <p>Vous êtes désormais <span class="text-warning">administrateur</span> du site.</p>
+                            <p class="lead mb-2"> {% if session.role == 1 %}
+                                Vous êtes connecté en tant qu’<strong>Administrateur</strong>.
                             {% else %}
-                                <p>Vous êtes maintenant un <span class="text-warning">client</span> de Persona World.</p>
-                            {% endif %}
-
+                                Vous êtes connecté en tant que <strong>Client</strong>.
+                            {% endif %} </p>
+                            
                             <a href="index.php?page=accueil" class="btn btn-lg mt-4"
                                style="background: var(--primary-color); color: white; border-radius: 30px; font-weight: 450; padding: 0.75rem 2rem; box-shadow: var(--shadow); transition: transform 0.2s;">
                                 ← Retour à l'accueil
@@ -30,7 +29,7 @@
     {% else %}
         <div class="container mt-5 text-center">
             <div class="alert alert-danger shadow p-4">
-                <h1 class="display-4">❌ Échec de la connexion</h1>
+                <h1 class="display-4">Échec de la connexion</h1>
                 <p class="lead">Erreur : {{ form.message }}</p>
                 <a href="index.php?page=connexion" class="btn btn-outline-danger mt-3">Réessayer</a>
             </div>

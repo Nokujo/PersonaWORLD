@@ -7,21 +7,26 @@ function getPage($db){
     $lesPages['connexion'] = "connexionControleur";
     $lesPages['a propos'] = "aproposControleur";
     $lesPages['maintenance'] = "maintenanceControleur";
-if ($db!=null){
-    if (isset($_GET['page'])){
-        $page = $_GET['page'];
+    $lesPages['deconnexion'] = "deconnexionControleur"; 
+    $lesPages['utilisateur'] = "utilisateurControleur";
+
+
+    if ($db != null) {
+        if (isset($_GET['page'])) {
+            $page = $_GET['page'];
+        } else {
+            $page = 'accueil';
+        }
+
+        if (isset($lesPages[$page])) {
+            $contenu = $lesPages[$page];
+        } else {
+            $contenu = $lesPages['accueil'];
+        }
     } else {
-        $page = 'accueil';
+        $contenu = $lesPages['maintenance'];
     }
-    if (isset($lesPages[$page])){
-        $contenu = $lesPages[$page];
-    }else{
-        $contenu = $lesPages['accueil'];
-    }
-} 
-else{
-    $contenu = $lesPages['maintenance'];
-    }
-return $contenu;
+
+    return $contenu;
 }
 ?>

@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block title %} {{ parent() }}Liste des utilisateurs {% endblock %}
+
+{% block contenu %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">👥 Liste des utilisateurs</h2>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Email</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Rôle</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in liste %}
+                    <tr>
+                        <td>{{ u.email }}</td>
+                        <td>{{ u.nom }}</td>
+                        <td>{{ u.prenom }}</td>
+                        <td>{{ u.libellerole }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

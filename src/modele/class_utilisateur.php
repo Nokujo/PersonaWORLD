@@ -1,21 +1,36 @@
 <?php
-class Client {
+class Utilisateur {
     private $db;
+    private $select;
 
     public function __construct($db) {
         $this->db = $db;
+
+        // Préparation de la requête de sélection
+        $this->select = $this->db->prepare("
+            SELECT u.id, u.email, u.nom, u.prenom, u.idRole, r.libelle AS libellerole
+            FROM utilisateur u
+            JOIN role r ON u.idRole = r.id
+            ORDER BY u.nom
+        ");
+    }
+
+    public function select() {
+        $this->select->execute();
+        if ($this->select->errorCode() != 0) {
+            print_r($this->select->errorInfo());
+        }
+        return $this->select->fetchAll();
     }
 
     public function inscrireClient($prenom, $nom, $email, $password, $nuser, $role) {
         try {
-            // Hashage du mot de passe
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            // Préparation de la requête SQL
-            $sql = "INSERT INTO utilisateur (prenom, nom, email, password, nuser, role) VALUES (:prenom, :nom, :email, :password, :nuser, :role)";
+            $sql = "INSERT INTO utilisateur (prenom, nom, email, password, nuser, idRole) 
+                    VALUES (:prenom, :nom, :email, :password, :nuser, :role)";
             $stmt = $this->db->prepare($sql);
 
-            // Liaison des paramètres
             $stmt->bindParam(':prenom', $prenom);
             $stmt->bindParam(':nom', $nom);
             $stmt->bindParam(':email', $email);
@@ -23,12 +38,9 @@ class Client {
             $stmt->bindParam(':nuser', $nuser);
             $stmt->bindParam(':role', $role, PDO::PARAM_INT);
 
-            // Exécution de la requête
             $stmt->execute();
-
             return true;
         } catch (PDOException $e) {
-            // Gestion des erreurs
             return "Erreur : " . $e->getMessage();
         }
     }

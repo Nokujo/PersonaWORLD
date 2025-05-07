@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 
 require_once '../src/controleur/_controleurs.php';
@@ -8,8 +12,8 @@ require_once '../config/connexion.php';
 require_once '../config/routes.php';
 require_once '../src/modele/_classes.php';
 $loader = new \Twig\Loader\FilesystemLoader('../src/vue/');
-$twig = $twig = new \Twig\Environment($loader, []);
-//$twig->addGlobal('session', $_SESSION);
+$twig = new \Twig\Environment($loader, []);
+$twig->addGlobal('session', $_SESSION);
 $db = connect($config);
 $contenu = getPage($db);
 $contenu($twig, $db);

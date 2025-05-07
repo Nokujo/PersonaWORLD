@@ -1,6 +1,8 @@
 <?php
-function connexionControleur($twig) : void {
-   
+function connexionControleur($twig) {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
     $form = [];
 
@@ -8,30 +10,23 @@ function connexionControleur($twig) : void {
         $email = $_POST['inputEmail'];
         $password = $_POST['inputPassword'];
 
-        // Connexion à la BDD
-        try {
-            $pdo = new PDO("mysql:host=10.51.7.100;dbname=site commerce;charset=utf8", "mustaphadmin", "mustapha");
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "SELECT * FROM utilisateur WHERE email = ?";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$email]);
-            $user = $stmt->fetch();
+        $pdo = new PDO("mysql:host=10.51.7.100;dbname=site commerce;charset=utf8", "mustaphadmin", "mustapha");
+        $sql = "SELECT * FROM utilisateur WHERE email = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
 
-            if ($user && password_verify($password, $user['password'])) {
-                $form['valide'] = true;
-                $form['email'] = $user['email'];
-                $form['role'] = $user['idRole'];
-            } else {
-                $form['valide'] = false;
-                $form['message'] = "Identifiants incorrects.";
-            }
-        } catch (PDOException $e) {
+        if ($user && password_verify($password, $user['password'])) {
+            $_SESSION['login'] = $user['email'];
+            $_SESSION['role'] = $user['idRole'];
+
+            header("Location: index.php?page=accueil");
+            exit(); 
+        } else {
             $form['valide'] = false;
-            $form['message'] = "Erreur serveur : " . $e->getMessage();
+            $form['message'] = "Identifiants incorrects.";
         }
     }
 
     echo $twig->render('connexion.html.twig', ['form' => $form]);
 }
-
-

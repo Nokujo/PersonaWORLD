@@ -32,6 +32,8 @@
 }
 
 body {
+   
+    margin-top: 100px; /* ajuste selon la hauteur réelle de ta navbar */
     font-family: 'Anton', sans-serif;
     background-color: var(--bg-primary);
     color: var(--text-primary);
