@@ -1,32 +1,43 @@
 <?php
-function getPage($db){
-    $lesPages['accueil'] = "accueilControleur";
-    $lesPages['contact'] = "contactControleur";
-    $lesPages['inscrire'] = "inscrireControleur";
-    $lesPages['mentions'] = "mentionsControleur";
-    $lesPages['connexion'] = "connexionControleur";
-    $lesPages['a propos'] = "aproposControleur";
-    $lesPages['maintenance'] = "maintenanceControleur";
-    $lesPages['deconnexion'] = "deconnexionControleur"; 
-    $lesPages['utilisateur'] = "utilisateurControleur";
+function getPage($db) {
+    $lesPages = [
+        'accueil'           => 'accueilControleur',
+        'contact'           => 'contactControleur',
+        'inscrire'          => 'inscrireControleur',
+        'mentions'          => 'mentionsControleur',
+        'a propos'          => 'aproposControleur',
+        'maintenance'       => 'maintenanceControleur',
+        'connexion'         => 'connexionControleur',
+        'deconnexion'       => 'deconnexionControleur',
 
+        // Utilisateur
+        'utilisateur'       => 'utilisateurControleur',
+        'utilisateurModif'  => 'utilisateurModifControleur',
 
-    if ($db != null) {
-        if (isset($_GET['page'])) {
-            $page = $_GET['page'];
-        } else {
-            $page = 'accueil';
-        }
+        // Type
+        'type'              => 'typeControleur',
+        'typeModif'         => 'typeModifControleur',
 
-        if (isset($lesPages[$page])) {
-            $contenu = $lesPages[$page];
-        } else {
-            $contenu = $lesPages['accueil'];
-        }
+        // Produit
+        'produit'           => 'produitControleur',
+        'produitAjout'      => 'produitAjoutControleur',
+        'produitModif'      => 'produitModifControleur',
+        'produitfiche'      => 'produitFicheControleur',
+
+        // Panier
+        'ajoutPanier'       => 'ajoutPanierControleur',
+        'panier'            => 'panierControleur',
+        'commande'          => 'commandeControleur',
+
+        // Commande
+        'facture'           => 'factureControleur',
+    ];
+
+    if ($db !== null) {
+        $page = $_GET['page'] ?? 'accueil';
+        return $lesPages[$page] ?? $lesPages['accueil'];
     } else {
-        $contenu = $lesPages['maintenance'];
+        return $lesPages['maintenance'];
     }
-
-    return $contenu;
 }
 ?>

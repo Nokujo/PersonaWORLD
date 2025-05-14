@@ -2,146 +2,239 @@
 {% block title %} {{ parent() }} Accueil {% endblock %}
 {% block contenu %}
 
-    <header class="hero">
-        <div class="hero-content">
-            <h1>Bienvenue dans le Metaverse</h1>
-            <p>Une sélection inspirée par la licence Shin Megami Tensei : Persona</p>
-            <a href="#products" class="cta-button">Explorer les trésors</a>
-        </div>
-    </header>
-  
-    
-            {% if session.login is defined %}
-        <div class="alert alert-light text-center mt-4">
-            Connecté en tant que <strong>{{ session.nuser }}</strong>
-            {% if session.role == 1 %}
-            (Administrateur)
-            {% elseif session.role == 0 %}
-            (Client)
-            {% endif %}
-        </div>
-        {% endif %}
+<div class="container my-4 text-center">
+  <input type="text" id="searchClient" class="form-control w-50 mx-auto" placeholder="Rechercher un produit…">
+  <ul id="suggestions" class="list-group w-50 mx-auto mt-2 text-left"></ul>
+</div>
+
+<!-- Hero section responsive -->
+<header class="hero d-flex align-items-center justify-content-center text-center">
+  <div class="hero-content">
+    <h1 class="display-4 font-weight-bold">Bienvenue dans le Metaverse</h1>
+    <p class="lead">Une sélection inspirée par la licence Shin Megami Tensei : Persona</p>
+    <a href="#products" class="btn btn-primary btn-lg mt-3">Explorer les trésors</a>
+  </div>
+</header>
 
 
-    <section class="categories">
-        <div class="container">
-            <h2>Catégories</h2>
-            <div class="category-grid">
-                <div class="category-card">
-                    <img src="img/bannerfigure.jpg" alt="Figurines">
-                    <h3>Figurines</h3>
-                </div>
-                <div class="category-card">
-                    <img src="img/bannervetement.png" alt="Vêtements">
-                    <h3>Vêtements</h3>
-                </div>
-                <div class="category-card">
-                    <img src="img/banneraccessoire.jpg" alt="Accessoires">
-                    <h3>Accessoires</h3>
-                </div>
+
+
+{% if session.login is defined %}
+  <div class="alert alert-light text-center mt-4">
+    Connecté en tant que <strong>{{ session.login }}</strong>
+    {% if session.role == 1 %}(Administrateur){% else %}(Client){% endif %}
+  </div>
+
+  {% if session.role == 1 %}
+    <div class="container my-4 text-center">
+      <a href="index.php?page=utilisateur" class="btn btn-secondary">Gérer les utilisateurs</a>
+      <a href="index.php?page=produit" class="btn btn-secondary">Gérer les produits</a>
+      <a href="index.php?page=commande" class="btn btn-secondary">Gérer les commandes</a>
+    </div>
+  {% else %}
+    <div class="container my-4 text-center">
+      <a href="index.php?page=panier" class="btn btn-primary">Voir mon panier</a>
+    </div>
+  {% endif %}
+{% else %}
+  <div class="container my-4 text-center">
+    <a href="index.php?page=connexion" class="btn btn-primary">Connexion</a>
+    <a href="index.php?page=inscrire" class="btn btn-outline-primary">Inscription</a>
+  </div>
+{% endif %}
+
+<section class="categories py-5 position-relative">
+  <div class="persona-bg"></div>
+  <div class="container">
+    <h2 class="mb-4 text-center">Catégories</h2>
+    <div class="row text-center">
+      
+      <div class="col-md-4 mb-3">
+        <a href="index.php?page=accueil&type=figurine#products" class="text-reset text-decoration-none">
+          <div class="card category-card h-100">
+            <img src="img/bannerfigure.jpg" class="card-img-top" alt="Figurines">
+            <div class="card-body">
+              <h5 class="card-title">Figurines</h5>
             </div>
-        </div>
-    </section>
+          </div>
+        </a>
+      </div>
 
-    <section id="products" class="products">
-        <div class="container">
-            <h2>En vedette</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-badge">Nouveau</div>
-                    <img src="img/joker figure.jpg" alt="Joker Figure">
-                    <div class="product-info">
-                        <h3>Joker - Collector</h3>
-                        <p class="price">45.99 €</p>
-                        <div class="product-actions">
-                            <button class="add-to-cart">Ajouter au panier</button>
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-badge">Exclusif</div>
-                    <img src="img/arsene figure.webp" alt="Arsène Figure">
-                    <div class="product-info">
-                        <h3>Arsène - Édition Limitée</h3>
-                        <p class="price">59.99 €</p>
-                        <div class="product-actions">
-                            <button class="add-to-cart">Ajouter au panier</button>
-                          
-                        </div>
-                    </div>
-                </div>
+      <div class="col-md-4 mb-3">
+        <a href="index.php?page=accueil&type=vetement#products" class="text-reset text-decoration-none">
+          <div class="card category-card h-100">
+            <img src="img/bannervetement.png" class="card-img-top" alt="Vêtements">
+            <div class="card-body">
+              <h5 class="card-title">Vêtements</h5>
             </div>
-        </div>
-    </section>
+          </div>
+        </a>
+      </div>
 
-    <section class="newsletter">
-        <div class="container">
-            <h2>Newsletter Velvet</h2>
-            <p>Reçois les actus, drops et promotions Persona</p>
-            <form class="newsletter-form">
-                <input type="email" placeholder="adresse@email.com">
-                <button type="submit">S'inscrire</button>
-            </form>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h3>À propos</h3>
-                    <p>Projet hommage non officiel à l'univers Persona. Créé par des fans, pour les fans.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Navigation</h3>
-                    <ul>
-                        <li><a href="#products">Produits</a></li>
-                    {% if session.login is not defined %}
-                    <li><a href="index.php?page=connexion">Connexion</a></li>
-                    <li><a href="index.php?page=inscrire">Inscription</a></li>
-                    {% endif %}
-
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <ul>
-                        <li><i class="fas fa-envelope"></i> support@velvetmail.com</li>
-                        <li><i class="fas fa-phone"></i> +33 7 00 00 00 00</li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Réseaux ( à venir )</h3>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-discord"></i></a>
-                        <a href="#"><i class="fab fa-x-twitter"></i></a>
-                    </div>
-                </div>
+      <div class="col-md-4 mb-3">
+        <a href="index.php?page=accueil&type=accessoire#products" class="text-reset text-decoration-none">
+          <div class="card category-card h-100">
+            <img src="img/banneraccessoire.jpg" class="card-img-top" alt="Accessoires">
+            <div class="card-body">
+              <h5 class="card-title">Accessoires</h5>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Persona WORLD. Tous droits réservés.</p>
-                <div class="footer-links">
-                    <a href="#">Mentions légales</a>
-                    <a href="#">Confidentialité</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+          </div>
+        </a>
+      </div>
 
-    <script>
-            const themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-        const icon = themeToggle.querySelector('i');
-        if (icon) {
-        icon.classList.toggle('fa-moon');
-        icon.classList.toggle('fa-sun');
-        }
-    });
+    </div>
+  </div>
+</section>
+
+{% if type is defined and type %}
+  <div class="text-center mb-4">
+    <a href="index.php?page=accueil#products" class="btn btn-outline-light">
+      🔄 Afficher tous les produits
+    </a>
+  </div>
+{% endif %}
+
+
+
+<section id="products" class="products py-5">
+  <div class="container">
+   <h2 class="mb-2">Nos produits</h2>
+    {% if type is defined and type %}
+    <h5 class="mb-4 text-info font-italic">Catégorie : {{ type|capitalize }}</h5>
+    {% endif %}
+
+    <div class="row">
+      {% for p in liste %}
+        <div class="col-md-3 mb-4">
+          {% if session.role is defined and session.role == 1 %}
+            <div class="card h-100">
+              {% if p.img %}<img src="{{ p.img }}" class="card-img-top" alt="{{ p.nom }}">{% endif %}
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ p.nom }}</h5>
+                <p class="card-text mt-auto"><strong>{{ p.prix }} €</strong></p>
+                <a href="index.php?page=produitModif&id={{ p.id }}" class="btn btn-outline-primary btn-sm">Modifier</a>
+              </div>
+            </div>
+          {% else %}
+            <div class="card h-100 d-flex flex-column justify-content-between">
+              <a href="#" class="text-decoration-none text-reset" data-toggle="modal" data-target="#modal-{{ p.id }}">
+              {% if p.img %}
+  <img src="{{ p.img }}" class="card-img-top" alt="{{ p.nom }}">
+{% else %}
+  <div class="text-muted text-center py-5">Pas d'image</div>
+{% endif %}
+
+
+                <div class="card-body">
+                  <h5 class="card-title">{{ p.nom }}</h5>
+                  <p class="card-text"><strong>{{ p.prix }} €</strong></p>
+                </div>
+              </a>
+              {% if session.role is defined and session.role != 1 %}
+                <div class="card-footer text-center">
+                  <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-sm btn-primary">Ajouter au panier</a>
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modal-{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-dark text-light">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel{{ p.id }}">{{ p.nom }}</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <img src="{{ p.img }}" class="img-fluid mb-3">
+                    <p class="text-secondary">{{ p.description }}</p>
+                    <p><strong>{{ p.prix }} €</strong></p>
+                    <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-primary">Ajouter au panier</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-section">
+        <h3>À propos</h3>
+        <p>Projet hommage non officiel à l'univers Persona. Créé par des fans, pour les fans.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Navigation</h3>
+        <ul>
+          <li><a href="#products">Produits</a></li>
+          {% if session.login is not defined %}
+            <li><a href="index.php?page=connexion">Connexion</a></li>
+            <li><a href="index.php?page=inscrire">Inscription</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Support</h3>
+        <ul>
+          <li><i class="fas fa-envelope"></i> support@velvetmail.com</li>
+          <li><i class="fas fa-phone"></i> +33 7 00 00 00 00</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Réseaux</h3>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-discord"></i></a>
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Persona WORLD. Tous droits réservés.</p>
+      <div class="footer-links">
+        <a href="#">Mentions légales</a>
+        <a href="#">Confidentialité</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('searchClient');
+  const suggestions = document.getElementById('suggestions');
+
+  input.addEventListener('input', () => {
+    const query = input.value.trim();
+    if (query.length < 2) {
+      suggestions.innerHTML = '';
+      return;
     }
 
-    </script>
+    fetch(`index.php?suggestion=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        suggestions.innerHTML = '';
+        data.forEach(p => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item list-group-item-dark';
+          li.textContent = p.nom;
+          li.addEventListener('click', () => {
+            window.location.href = `index.php?page=produitfiche&id=${p.id}`;
+          });
+          suggestions.appendChild(li);
+        });
+      });
+  });
+});
+</script>
+
 {% endblock %}

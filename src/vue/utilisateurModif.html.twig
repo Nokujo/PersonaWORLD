@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ parent() }} Modifier un utilisateur{% endblock %}
+
+{% block contenu %}
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Modifier un utilisateur</h1>
+    <a href="index.php?page=utilisateur" class="btn btn-outline-light">
+      ← Revenir à la liste
+    </a>
+  </div>
+
+  {% if form.message is defined %}
+    <div class="alert alert-info">{{ form.message }}</div>
+  {% endif %}
+
+  {% if form.utilisateur is defined %}
+    <form method="post" action="index.php?page=utilisateurModif">
+      <input type="hidden" name="id" value="{{ form.utilisateur.id }}">
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control"
+               value="{{ form.utilisateur.email }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Mot de passe <small>(laisser vide → pas de changement)</small></label>
+        <input type="password" name="inputPassword" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Confirmation du mot de passe</label>
+        <input type="password" name="inputPassword2" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" name="nom" class="form-control"
+               value="{{ form.utilisateur.nom }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Prénom</label>
+        <input type="text" name="prenom" class="form-control"
+               value="{{ form.utilisateur.prenom }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Rôle</label>
+        <select name="role" class="form-control">
+          {% for r in form.roles %}
+            <option value="{{ r.id }}"
+              {% if r.id == form.utilisateur.idRole %}selected{% endif %}>
+              {{ r.libelle }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" name="btModifier" class="btn btn-primary">
+        Modifier
+      </button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

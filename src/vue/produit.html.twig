@@ -1,0 +1,145 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ parent() }} Liste des produits{% endblock %}
+
+{% block contenu %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Liste des produits</h2>
+
+  {% if form.etat is defined %}
+    <div class="alert alert-{{ form.etat ? 'success' : 'danger' }}">
+      {{ form.etat ? 'Suppression réussie' : 'Échec de la suppression' }}
+    </div>
+  {% endif %}
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button id="toggleSelectProd" class="btn btn-secondary">
+      Sélection
+    </button>
+    <a href="index.php?page=produitAjout" class="btn btn-primary">
+      Ajouter un produit
+    </a>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <input type="text" id="searchInput" class="form-control w-50" placeholder="Rechercher un produit…" value="{{ search|default('') }}" />
+    <select id="sortSelect" class="form-control w-25">
+      <option value="">Trier par…</option>
+      <option value="name_asc">Nom A → Z</option>
+      <option value="name_desc">Nom Z → A</option>
+      <option value="price_asc">Prix croissant</option>
+      <option value="price_desc">Prix décroissant</option>
+    </select>
+  </div>
+
+  <form id="prodForm" action="index.php?page=produit" method="post">
+    <div class="table-responsive">
+      <table class="table table-dark table-bordered table-hover">
+        <thead>
+          <tr>
+            <th class="select-col text-center d-none">
+              <input type="checkbox" id="selectAllProd">
+            </th>
+            <th>Image</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Type</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in liste %}
+            <tr>
+              <td class="select-col text-center d-none">
+                <input type="checkbox" name="cocher[]" value="{{ p.id }}">
+              </td>
+              <td>
+                {% if p.img %}
+                    <img src="{{ p.img }}" width="50" style="max-height: 50px;">
+                {% else %}
+                    <span class="text-muted">Pas de visuel</span>
+                {% endif %}
+                </td>
+
+              <td class="product-name">{{ p.nom }}</td>
+              <td class="price">{{ p.prix }}</td>
+              <td>{{ p.quantite }}</td>
+              <td>{{ p.typeLibelle ?? '—' }}</td>
+              <td class="text-center">
+                <a href="index.php?page=produitModif&id={{ p.id }}" class="btn btn-sm btn-primary mr-1">Modifier</a>
+                <a href="index.php?page=produit&id={{ p.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer ce produit ?');">Supprimer</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <button type="submit" name="btSupprimer" id="bulkDeleteProd" class="btn btn-danger mt-3 d-none">
+      Supprimer la sélection
+    </button>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('searchInput');
+  const select = document.getElementById('sortSelect');
+  const rows = Array.from(document.querySelectorAll('table tbody tr'));
+
+  function filtrerEtTrier() {
+    const terme = input.value.trim().toUpperCase();
+
+    rows.forEach(tr => {
+      const nom = tr.querySelector('td:nth-child(3)').textContent.toUpperCase();
+      tr.style.display = nom.includes(terme) ? '' : 'none';
+    });
+
+    const mode = select.value;
+    if (mode) {
+      const visibles = rows.filter(tr => tr.style.display !== 'none');
+      visibles.sort((a, b) => {
+        if (mode.startsWith('name')) {
+          const na = a.querySelector('td:nth-child(3)').textContent;
+          const nb = b.querySelector('td:nth-child(3)').textContent;
+          return mode === 'name_asc' ? na.localeCompare(nb, 'fr') : nb.localeCompare(na, 'fr');
+        } else {
+          const pa = parseFloat(a.querySelector('td:nth-child(4)').textContent);
+          const pb = parseFloat(b.querySelector('td:nth-child(4)').textContent);
+          return mode === 'price_asc' ? pa - pb : pb - pa;
+        }
+      });
+      const tbody = document.querySelector('table tbody');
+      visibles.forEach(tr => tbody.appendChild(tr));
+    }
+  }
+
+  input.addEventListener('input', filtrerEtTrier);
+  select.addEventListener('change', filtrerEtTrier);
+
+  const toggleBtnProd = document.getElementById('toggleSelectProd');
+  const colsProd = document.querySelectorAll('.select-col');
+  const selectAllProd = document.getElementById('selectAllProd');
+  const bulkDelProd = document.getElementById('bulkDeleteProd');
+  let selectionMode = false;
+
+  toggleBtnProd.addEventListener('click', () => {
+    selectionMode = !selectionMode;
+    colsProd.forEach(el => el.classList.toggle('d-none', !selectionMode));
+    bulkDelProd.classList.toggle('d-none', !selectionMode);
+    toggleBtnProd.textContent = selectionMode ? 'Annuler' : 'Sélection';
+    if (!selectionMode) {
+      selectAllProd.checked = false;
+      document.querySelectorAll('input[name="cocher[]"]').forEach(cb => cb.checked = false);
+    }
+  });
+
+  selectAllProd.addEventListener('change', e => {
+    document.querySelectorAll('input[name="cocher[]"]').forEach(cb => {
+      cb.checked = e.target.checked;
+    });
+  });
+});
+</script>
+{% endblock %}

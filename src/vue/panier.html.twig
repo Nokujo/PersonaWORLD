@@ -1,0 +1,52 @@
+{% extends "base.html.twig" %}
+{% block title %} {{ parent() }}Mon Panier{% endblock %}
+{% block contenu %}
+<div class="container mt-5">
+  <h2>Mon Panier</h2>
+
+  {% if form.valide is defined %}
+    {% if form.valide %}
+      <div class="alert alert-success">{{ form.message }}</div>
+      {% if form.erreur is defined %}
+        <div class="alert alert-warning">{{ form.erreur }}</div>
+      {% endif %}
+    {% else %}
+      <div class="alert alert-danger">{{ form.message }}</div>
+    {% endif %}
+  {% endif %}
+
+  {% if liste|length > 0 %}
+    <form action="index.php?page=panier" method="post">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Produit</th><th>Action</th><th>Prix</th><th>Qté</th><th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% set total = 0 %}
+          {% for p in liste %}
+            {% set somme = session.panier[p.id] * p.prix %}
+            {% set total = total + somme %}
+            <tr>
+              <td><a href="index.php?page=produitfiche&id={{ p.id }}">{{ p.nom }}</a></td>
+
+              <td><a href="index.php?page=panier&remove={{ p.id }}" class="text-danger">Supprimer</a></td>
+              <td>{{ p.prix }} €</td>
+              <td><input type="number" name="q-{{ p.id }}" value="{{ session.panier[p.id] }}" min="1" required></td>
+              <td>{{ somme }} €</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="text-right mb-3"><strong>Total : {{ total }} €</strong></div>
+      <input type="hidden" name="montant" value="{{ total }}">
+      <button type="submit" name="update" class="btn btn-secondary">Mettre à jour</button>
+      <button type="submit" name="placerCommande" class="btn btn-primary">Passer la commande</button>
+    </form>
+  {% else %}
+    <p>Votre panier est vide.</p>
+    <a href="index.php?page=accueil" class="btn btn-outline-primary">Retour à l’accueil</a>
+  {% endif %}
+</div>
+{% endblock %}

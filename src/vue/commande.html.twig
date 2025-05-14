@@ -1,0 +1,78 @@
+{% extends "base.html.twig" %}
+{% block title %} {{ parent() }} Commandes {% endblock %}
+{% block contenu %}
+<div class="container my-5">
+  <h2 class="mb-4 text-center">Gestion des commandes</h2>
+
+ {% if commandes|length == 0 %}
+  <div class="text-center">
+    <p>Aucune commande pour le moment.</p>
+    
+    {% if filtre is defined and filtre %}
+
+      <a href="index.php?page=commande" class="btn btn-outline-light mt-2">
+        Revenir à toutes les commandes
+      </a>
+    {% endif %}
+  </div>
+
+  {% else %}
+    <div class="table-responsive">
+    <form method="get" class="form-inline mb-4 justify-content-center">
+  <input type="hidden" name="page" value="commande">
+  <label for="filtre" class="mr-2 text-light">Filtrer :</label>
+  <select name="filtre" id="filtre" class="form-control w-auto" onchange="this.form.submit()">
+    <option value="">Toutes</option>
+    <option value="1" {{ app.request.get('filtre') == '1' ? 'selected' : '' }}>En attente</option>
+    <option value="2" {{ app.request.get('filtre') == '2' ? 'selected' : '' }}>Traitée</option>
+  </select>
+</form>
+
+      <table class="table table-dark table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Client</th>
+            <th>Montant</th>
+            <th>Produits</th>
+            <th>État</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cmd in commandes %}
+            <tr>
+              <td>{{ cmd.id }}</td>
+              <td>{{ cmd.dateCommande }}</td>
+              <td>{{ cmd.client }}</td>
+              <td>{{ cmd.montant }} €</td>
+              <td>
+                <ul class="mb-0">
+                  {% for p in cmd.produits %}
+                    <li>{{ p.nom }} x{{ p.quantite }}</li>
+                  {% endfor %}
+                </ul>
+              </td>
+              <td class="text-center">
+                {% if cmd.idEtat == 1 %}
+                    <a href="index.php?page=commande&valider={{ cmd.id }}" class="btn btn-sm btn-success mb-1">Valider</a><br>
+                {% endif %}
+                <a href="index.php?page=commande&supprimer={{ cmd.id }}" 
+                    class="btn btn-sm btn-danger mb-1"
+                    onclick="return confirm('Confirmer la suppression de cette commande ?');">
+                    Supprimer
+                </a><br>
+                <a href="index.php?page=facture&id={{ cmd.id }}" class="btn btn-sm btn-outline-info mt-1">
+                    🧾 Facture
+                </a>
+               </td>
+
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

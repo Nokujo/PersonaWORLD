@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ parent() }} Modifier un type{% endblock %}
+{% block contenu %}
+<div class="container mt-5">
+  <h1>Modifier un type</h1>
+
+  {% if form.message is defined %}
+    <div class="alert alert-info">{{ form.message }}</div>
+  {% endif %}
+
+  {% if form.type is defined %}
+    <form method="post" action="index.php?page=typeModif">
+      <input type="hidden" name="id" value="{{ form.type.id }}">
+      <div class="form-group">
+        <label>Libellé</label>
+        <input type="text" name="libelle" class="form-control"
+               value="{{ form.type.libelle }}" required>
+      </div>
+      <button type="submit" name="btModifier" class="btn btn-primary">
+        Modifier
+      </button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ parent() }} Modifier un produit{% endblock %}
+{% block contenu %}
+<div class="container mt-5">
+  <h1>Modifier le produit</h1>
+
+  {% if form.message is defined %}
+    <div class="alert alert-info d-flex justify-content-between align-items-center">
+      <span>{{ form.message }}</span>
+      <a href="index.php?page=produit" class="btn btn-secondary ml-3">Voir les produits</a>
+    </div>
+  {% endif %}
+
+  {% if form.prod is defined %}
+    <form method="post" action="index.php?page=produitModif">
+      <input type="hidden" name="id" value="{{ form.prod.id }}">
+
+      {% if form.prod.img %}
+        <div class="mb-3 text-center">
+          <img src="{{ form.prod.img }}" alt="{{ form.prod.nom }}" style="max-width: 100%; max-height: 200px; object-fit: cover;">
+        </div>
+      {% endif %}
+
+      <input type="hidden" name="existingImg" value="{{ form.prod.img }}">
+
+      <div class="form-group">
+        <label>URL de l’image</label>
+        <input type="url" name="img" class="form-control" placeholder="https://exemple.com/image.jpg"
+               value="{{ form.prod.img }}">
+        <small class="form-text text-muted">Collez un lien direct vers une image valide (ex : hébergée sur Imgur ou un CDN).</small>
+      </div>
+
+      <div class="form-group">
+        <label>Catégorie</label>
+        <select name="type" class="form-control">
+          <option value="">-- Choisir --</option>
+          {% for t in form.types %}
+            <option value="{{ t.id }}" {% if t.id == form.prod.idType %}selected{% endif %}>{{ t.libelle }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" name="nom" class="form-control" value="{{ form.prod.nom }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea name="description" class="form-control" required>{{ form.prod.description }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Prix</label>
+        <input type="number" name="prix" class="form-control" step="0.01" value="{{ form.prod.prix }}" required>
+      </div>
+
+      <div class="form-group">
+        <label>Quantité</label>
+        <input type="number" name="quantite" class="form-control" value="{{ form.prod.quantite }}" required>
+      </div>
+
+      <button type="submit" name="btModifier" class="btn btn-primary">Modifier</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

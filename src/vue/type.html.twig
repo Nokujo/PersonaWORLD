@@ -1,0 +1,87 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ parent() }} Liste des types{% endblock %}
+
+{% block contenu %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Liste des types</h2>
+
+  {% if form.etat is defined %}
+    <div class="alert alert-{{ form.etat ? 'success' : 'danger' }}">
+      {{ form.etat ? 'Suppression réussie' : 'Échec de la suppression' }}
+    </div>
+  {% endif %}
+
+  <button id="toggleSelectType" class="btn btn-secondary mb-3">
+    Sélection
+  </button>
+
+  <form id="typeForm" action="index.php?page=type" method="post">
+    <div class="table-responsive">
+      <table class="table table-dark table-bordered table-hover">
+        <thead>
+          <tr>
+            <th class="select-col text-center d-none">
+              <input type="checkbox" id="selectAllType">
+            </th>
+            <th>ID</th>
+            <th>Libellé</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in liste %}
+            <tr>
+              <td class="select-col text-center d-none">
+                <input type="checkbox" name="cocher[]" value="{{ t.id }}">
+              </td>
+              <td>{{ t.id }}</td>
+              <td>{{ t.libelle }}</td>
+              <td class="text-center">
+                <a href="index.php?page=typeModif&id={{ t.id }}" class="btn btn-sm btn-primary mr-1">Modifier</a>
+
+                <a href="index.php?page=type&id={{ t.id }}"
+                  class="btn btn-sm btn-danger"
+                  onclick="return confirm('Supprimer ce type ?');">
+                  Supprimer
+                </a>
+              </td>
+
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <button type="submit" name="btSupprimer" id="bulkDeleteType" class="btn btn-danger mt-3 d-none">
+      Supprimer sélection
+    </button>
+  </form>
+</div>
+
+<script>
+  const toggleBtnType = document.getElementById('toggleSelectType');
+  const checkColsType = document.querySelectorAll('.select-col');
+  const selectAllCbType = document.getElementById('selectAllType');
+  const bulkDeleteType = document.getElementById('bulkDeleteType');
+
+  let selectionTypeMode = false;
+
+  toggleBtnType.addEventListener('click', () => {
+    selectionTypeMode = !selectionTypeMode;
+    checkColsType.forEach(td => td.classList.toggle('d-none', !selectionTypeMode));
+    bulkDeleteType.classList.toggle('d-none', !selectionTypeMode);
+    toggleBtnType.textContent = selectionTypeMode ? 'Annuler' : 'Sélection';
+
+    if (!selectionTypeMode) {
+      selectAllCbType.checked = false;
+      document.querySelectorAll('input[name="cocher[]"]').forEach(cb => cb.checked = false);
+    }
+  });
+
+  selectAllCbType.addEventListener('change', e => {
+    document.querySelectorAll('input[name="cocher[]"]').forEach(cb => {
+      cb.checked = e.target.checked;
+    });
+  });
+</script>
+{% endblock %}

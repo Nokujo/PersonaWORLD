@@ -1,66 +1,67 @@
 <?php
-function inscrireControleur($twig) : void {
-    $form = array();
+
+function inscrireControleur($twig) {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+
+    require_once '../config/parametres.php';  // ✅ ajoute ça AVANT connexion
+    require_once '../config/connexion.php';
+
+    $form = [];
 
     if (isset($_POST['btnInscrire'])) {
-        $inputEmail     = filter_input(INPUT_POST, 'inputEmail', FILTER_VALIDATE_EMAIL);
-        $inputPassword  = $_POST['inputPassword'];
-        $inputPassword2 = $_POST['inputPassword2'];
-        $nom            = htmlspecialchars($_POST['nom']);
-        $prenom         = htmlspecialchars($_POST['prenom']);
-        $nuser          = htmlspecialchars($_POST['nuser']);
-        $role           = $_POST['role'];
+        $email        = filter_input(INPUT_POST, 'inputEmail', FILTER_VALIDATE_EMAIL);
+        $password     = $_POST['inputPassword'] ?? '';
+        $password2    = $_POST['inputPassword2'] ?? '';
+        $nom          = htmlspecialchars($_POST['nom']);
+        $prenom       = htmlspecialchars($_POST['prenom']);
+        $nuser        = $_POST['nuser'];
+        $role         = 2;
 
-        
-        if (!$inputEmail) {
+        if (!$email) {
             $form['valide'] = false;
             $form['message'] = 'Email invalide';
-        }
-        
-        else if ($inputPassword !== $inputPassword2) {
+        } elseif ($password !== $password2) {
             $form['valide'] = false;
             $form['message'] = 'Les mots de passe sont différents';
-        } 
-        
-        else if (strlen($inputPassword) < 8) {
+        } elseif (strlen($password) < 8) {
             $form['valide'] = false;
             $form['message'] = 'Le mot de passe doit contenir au moins 8 caractères';
-        }
-        else {
+        } else {
             try {
-                $pdo = new PDO("mysql:host=10.51.7.100;dbname=site commerce;charset=utf8", "mustaphadmin", "mustapha");
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                
-              
-                $checkSql = "SELECT COUNT(*) FROM utilisateur WHERE email = ?";
-                $checkStmt = $pdo->prepare($checkSql);
-                $checkStmt->execute([$inputEmail]);
-                
-                if ($checkStmt->fetchColumn() > 0) {
+                $db = connect();  // ✅ ici config est bien défini
+                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                // Vérifie si email existe déjà
+                $check = $db->prepare("SELECT COUNT(*) FROM utilisateur WHERE email = ?");
+                $check->execute([$email]);
+
+                if ($check->fetchColumn() > 0) {
                     $form['valide'] = false;
                     $form['message'] = 'Cet email est déjà utilisé';
                 } else {
-                    $sql = "INSERT INTO utilisateur (prenom, nom, nuser, email, password, idRole) VALUES (?, ?, ?, ?, ?, ?)";
-                    $stmt = $pdo->prepare($sql);
+                    $stmt = $db->prepare("
+                        INSERT INTO utilisateur (prenom, nom, nuser, email, password, idRole)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    ");
                     $stmt->execute([
-                        $prenom,
-                        $nom,
-                        $nuser,
-                        $inputEmail,
-                        password_hash($inputPassword, PASSWORD_DEFAULT),
+                        $prenom, $nom, $nuser, $email,
+                        password_hash($password, PASSWORD_DEFAULT),
                         $role
                     ]);
-                    $form['valide'] = true;
-                    $form['email'] = $inputEmail;
-                    $form['nuser'] = $nuser;
-                    $form['role'] = $role;
+
+                    $_SESSION['login'] = $email;
+                    $_SESSION['role'] = $role;
+
+                    header('Location: index.php?page=accueil');
+                    exit;
                 }
+
             } catch (PDOException $e) {
                 $form['valide'] = false;
-                $form['message'] = "Erreur lors de l'inscription : " . $e->getMessage();
+                $form['message'] = "Erreur : " . $e->getMessage();
             }
         }
     }
 
-    echo $twig->render('inscrire.html.twig', array('form' => $form));
+    echo $twig->render('inscrire.html.twig', ['form' => $form]);
 }
