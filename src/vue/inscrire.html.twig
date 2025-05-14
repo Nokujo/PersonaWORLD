@@ -1,17 +1,17 @@
-{% set bodyClass = 'inscription-bg' %}
+{% block styles %}
+  <style>
+    body {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), 
+                  url('img/inscription2.jpg') no-repeat center center fixed;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+  </style>
+{% endblock %}
 
 {% extends "base.html.twig" %}
 {% block title %} {{ parent() }}S'inscrire {% endblock %}
 {% block contenu %}
-
-<style>
-body {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
-                url('img/marie.jpg') no-repeat center center fixed;
-    background-size: cover;
-}
-</style>
-
 
 {% if form.valide is defined %}
     {% if form.valide == true %}
@@ -45,7 +45,7 @@ body {
         <div class="col-md-8 col-lg-6">
             <div class="card bg-dark text-light shadow-lg">
                 <div class="card-body">
-                    <h2 class="text-center mb-4">🌀 Inscription à la Velvet Room</h2>
+                    <h2 class="text-center mb-4">Inscription à Persona WORLD</h2>
                     <p class="text-center text-muted mb-4">Entrez dans l’univers Persona</p>
                     <form action="index.php?page=inscrire" method="post">
                         <div class="form-row">
@@ -98,5 +98,7 @@ body {
         </div>
     </div>
 </div>
+
+
 {% endif %}
 {% endblock %}

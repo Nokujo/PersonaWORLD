@@ -22,15 +22,27 @@
   </div>
 
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <input type="text" id="searchInput" class="form-control w-50" placeholder="Rechercher un produit…" value="{{ search|default('') }}" />
-    <select id="sortSelect" class="form-control w-25">
-      <option value="">Trier par…</option>
-      <option value="name_asc">Nom A → Z</option>
-      <option value="name_desc">Nom Z → A</option>
-      <option value="price_asc">Prix croissant</option>
-      <option value="price_desc">Prix décroissant</option>
-    </select>
-  </div>
+  <input type="text" id="searchInput" class="form-control w-50" placeholder="Rechercher un produit…" value="{{ search|default('') }}" />
+  
+  <select id="typeFilter" class="form-control w-25 mr-2">
+    <option value="">Tous les types</option>
+    <option value="vetement">Vêtement</option>
+    <option value="Figurine">Figurine</option>
+    <option value="Accessoire">Accessoire</option>
+  </select>
+
+  <select id="sortSelect" class="form-control w-25">
+    <option value="">Trier par…</option>
+    <option value="name_asc">Nom A → Z</option>
+    <option value="name_desc">Nom Z → A</option>
+    <option value="price_asc">Prix croissant</option>
+    <option value="price_desc">Prix décroissant</option>
+    <option value="quantity_asc">Quantité croissante</option>
+    <option value="quantity_desc">Quantité décroissante</option>
+    <option value="type_asc">Type A → Z</option>
+    <option value="type_desc">Type Z → A</option>
+  </select>
+</div>
 
   <form id="prodForm" action="index.php?page=produit" method="post">
     <div class="table-responsive">
@@ -81,35 +93,56 @@
     </button>
   </form>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('searchInput');
   const select = document.getElementById('sortSelect');
+  const typeFilter = document.getElementById('typeFilter');
   const rows = Array.from(document.querySelectorAll('table tbody tr'));
 
   function filtrerEtTrier() {
-    const terme = input.value.trim().toUpperCase();
+    const terme = input.value.trim().toLowerCase();
+    const type = typeFilter.value;
 
     rows.forEach(tr => {
-      const nom = tr.querySelector('td:nth-child(3)').textContent.toUpperCase();
-      tr.style.display = nom.includes(terme) ? '' : 'none';
+      const nom = tr.querySelector('.product-name').textContent.toLowerCase();
+      const typeText = tr.querySelector('td:nth-child(6)').textContent.toLowerCase();
+      const matchNom = nom.includes(terme);
+      const matchType = !type || typeText === type.toLowerCase();
+      tr.style.display = matchNom && matchType ? '' : 'none';
     });
 
     const mode = select.value;
     if (mode) {
       const visibles = rows.filter(tr => tr.style.display !== 'none');
       visibles.sort((a, b) => {
-        if (mode.startsWith('name')) {
-          const na = a.querySelector('td:nth-child(3)').textContent;
-          const nb = b.querySelector('td:nth-child(3)').textContent;
-          return mode === 'name_asc' ? na.localeCompare(nb, 'fr') : nb.localeCompare(na, 'fr');
-        } else {
-          const pa = parseFloat(a.querySelector('td:nth-child(4)').textContent);
-          const pb = parseFloat(b.querySelector('td:nth-child(4)').textContent);
-          return mode === 'price_asc' ? pa - pb : pb - pa;
+        let valA, valB;
+        switch (mode) {
+          case 'name_asc':
+          case 'name_desc':
+            valA = a.querySelector('.product-name').textContent;
+            valB = b.querySelector('.product-name').textContent;
+            return mode === 'name_asc' ? valA.localeCompare(valB, 'fr') : valB.localeCompare(valA, 'fr');
+          case 'price_asc':
+          case 'price_desc':
+            valA = parseFloat(a.querySelector('.price').textContent);
+            valB = parseFloat(b.querySelector('.price').textContent);
+            return mode === 'price_asc' ? valA - valB : valB - valA;
+          case 'quantity_asc':
+          case 'quantity_desc':
+            valA = parseInt(a.querySelector('td:nth-child(5)').textContent);
+            valB = parseInt(b.querySelector('td:nth-child(5)').textContent);
+            return mode === 'quantity_asc' ? valA - valB : valB - valA;
+          case 'type_asc':
+          case 'type_desc':
+            valA = a.querySelector('td:nth-child(6)').textContent;
+            valB = b.querySelector('td:nth-child(6)').textContent;
+            return mode === 'type_asc' ? valA.localeCompare(valB, 'fr') : valB.localeCompare(valA, 'fr');
+          default:
+            return 0;
         }
       });
+
       const tbody = document.querySelector('table tbody');
       visibles.forEach(tr => tbody.appendChild(tr));
     }
@@ -117,7 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   input.addEventListener('input', filtrerEtTrier);
   select.addEventListener('change', filtrerEtTrier);
+  typeFilter.addEventListener('change', filtrerEtTrier);
 
+  // Sélection multiple
   const toggleBtnProd = document.getElementById('toggleSelectProd');
   const colsProd = document.querySelectorAll('.select-col');
   const selectAllProd = document.getElementById('selectAllProd');
@@ -129,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     colsProd.forEach(el => el.classList.toggle('d-none', !selectionMode));
     bulkDelProd.classList.toggle('d-none', !selectionMode);
     toggleBtnProd.textContent = selectionMode ? 'Annuler' : 'Sélection';
+
     if (!selectionMode) {
       selectAllProd.checked = false;
       document.querySelectorAll('input[name="cocher[]"]').forEach(cb => cb.checked = false);
@@ -137,9 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   selectAllProd.addEventListener('change', e => {
     document.querySelectorAll('input[name="cocher[]"]').forEach(cb => {
-      cb.checked = e.target.checked;
+      if (cb.closest('tr').style.display !== 'none') {
+        cb.checked = e.target.checked;
+      }
     });
   });
 });
 </script>
+
 {% endblock %}

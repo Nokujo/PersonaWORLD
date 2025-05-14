@@ -1,5 +1,13 @@
-{% set bodyClass = 'connexion-bg' %}
-
+{% block styles %}
+  <style>
+    body {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), 
+                  url('img/connexion2.jpg') no-repeat center center fixed;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+  </style>
+{% endblock %}
 {% extends "base.html.twig" %}
 {% block title %} {{ parent() }}Connexion{% endblock %}
 {% block contenu %}
@@ -43,7 +51,7 @@
         <div class="col-md-8 col-lg-6">
             <div class="card bg-dark text-light shadow-lg">
                 <div class="card-body">
-                    <h2 class="text-center mb-4">🔐 Connexion à la Velvet Room</h2>
+                    <h2 class="text-center mb-4">Connexion</h2>
                     <p class="text-center text-muted mb-4">Identifiez-vous pour accéder à votre collection Persona</p>
 
                     <form method="post" action="index.php?page=connexion">

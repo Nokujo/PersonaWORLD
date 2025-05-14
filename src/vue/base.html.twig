@@ -18,9 +18,12 @@
   </style>
 
   <title>{% block title %} PERSONA WORLD - {% endblock %}</title>
+  {% block styles %}{% endblock %}
+
 </head>
 
-<body class="{{ bodyClass|default('') }}">
+<body>
+
 
 <!-- NAVBAR -->
 <nav class="navbar">
@@ -34,7 +37,7 @@
     <div class="nav-right">
       <div class="nav-links">
         <a href="index.php?page=accueil" class="active">Accueil</a>
-        <a href="#products">Boutique</a>
+        <a href="index.php?page=accueil#products">Boutique</a>
 
         {% if session.login is defined %}
           <a href="#"> {{ session.login }}</a>

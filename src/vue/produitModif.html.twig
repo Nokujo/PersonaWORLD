@@ -14,6 +14,12 @@
   {% if form.prod is defined %}
     <form method="post" action="index.php?page=produitModif">
       <input type="hidden" name="id" value="{{ form.prod.id }}">
+         <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <a href="index.php?page=produit" class="btn btn-outline-light">
+            ← Revenir à la liste
+          </a>
+        </div>
 
       {% if form.prod.img %}
         <div class="mb-3 text-center">
@@ -25,9 +31,7 @@
 
       <div class="form-group">
         <label>URL de l’image</label>
-        <input type="url" name="img" class="form-control" placeholder="https://exemple.com/image.jpg"
-               value="{{ form.prod.img }}">
-        <small class="form-text text-muted">Collez un lien direct vers une image valide (ex : hébergée sur Imgur ou un CDN).</small>
+        <input type="url" name="img" class="form-control" 
       </div>
 
       <div class="form-group">

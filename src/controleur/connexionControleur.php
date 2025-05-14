@@ -1,8 +1,10 @@
 <?php
 function connexionControleur($twig) {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+   if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+
 
     require_once(__DIR__ . '/../../config/connexion.php'); // ✅
 
@@ -22,16 +24,19 @@ function connexionControleur($twig) {
             $user = $stmt->fetch();
 
             if ($user && password_verify($password, $user['password'])) {
-                $_SESSION['login'] = $user['email'];
-                $_SESSION['role'] = $user['idRole'];
+                    $_SESSION['login'] = $user['email'];
+                    $_SESSION['role']  = $user['idRole'];
+                    $_SESSION['id']    = $user['id'];
 
-                if ($_SESSION['role'] == 3) {
-                    header("Location: index.php?page=produit");
+                    session_write_close(); // ✅ ici AVANT le header()
+
+                    if ($_SESSION['role'] == 3) {
+                        header("Location: index.php?page=produit");
+                    } else {
+                        header("Location: index.php?page=accueil");
+                    }
+                    exit();
                 } else {
-                    header("Location: index.php?page=accueil");
-                }
-                exit();
-            } else {
                 $form['valide'] = false;
                 $form['message'] = "Identifiants incorrects.";
             }

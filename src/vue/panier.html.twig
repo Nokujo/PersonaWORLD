@@ -1,3 +1,13 @@
+{% block styles %}
+  <style>
+    body {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), 
+                  url('img/panier.jpg') no-repeat center center fixed;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+  </style>
+{% endblock %}
 {% extends "base.html.twig" %}
 {% block title %} {{ parent() }}Mon Panier{% endblock %}
 {% block contenu %}
@@ -30,7 +40,6 @@
             {% set total = total + somme %}
             <tr>
               <td><a href="index.php?page=produitfiche&id={{ p.id }}">{{ p.nom }}</a></td>
-
               <td><a href="index.php?page=panier&remove={{ p.id }}" class="text-danger">Supprimer</a></td>
               <td>{{ p.prix }} €</td>
               <td><input type="number" name="q-{{ p.id }}" value="{{ session.panier[p.id] }}" min="1" required></td>
@@ -44,8 +53,16 @@
       <button type="submit" name="update" class="btn btn-secondary">Mettre à jour</button>
       <button type="submit" name="placerCommande" class="btn btn-primary">Passer la commande</button>
     </form>
+
   {% else %}
     <p>Votre panier est vide.</p>
+
+    {% if form.commandeOK is defined and form.commandeOK %}
+      <a href="index.php?page=facture&id={{ form.idCommande }}" class="btn btn-sm btn-outline-primary" target="_blank">
+        📄 Télécharger la facture  (un mail contenant la facture vous à été envoyé automatiquement)
+      </a>
+    {% endif %}
+
     <a href="index.php?page=accueil" class="btn btn-outline-primary">Retour à l’accueil</a>
   {% endif %}
 </div>

@@ -20,19 +20,7 @@
     transition: var(--transition);
   }
   
-  body.connexion-bg {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)),
-                url('img/lavenza.jpg') no-repeat center center fixed !important;
-    background-size: cover !important;
-    background-attachment: fixed !important;
-  }
-  
-  body.inscription-bg {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
-                url('img/marie.jpg') no-repeat center center fixed !important;
-    background-size: cover !important;
-    background-attachment: fixed !important;
-  }
+
   
   .hero {
     height: 90vh;
@@ -204,33 +192,52 @@
     text-align: center;
   }
   
-  
   .footer {
-    background-color: var(--bg-secondary);
-    padding: 3rem 0;
-    color: var(--text-secondary);
-  }
-  
-  .footer a {
-    color: var(--text-secondary);
-    text-decoration: none;
-  }
-  
-  .footer a:hover {
-    color: var(--accent-color);
-  }
-  
-  .footer .social-links a {
-    color: var(--text-secondary);
-  }
-  
-  .footer .social-links a:hover {
-    color: white;
-    background: var(--primary-color);
-    border-radius: 50%;
-    padding: 0.5rem;
-  }
-  
+  background-color: var(--bg-secondary);
+  padding: 3rem 0;
+  color: var(--text-secondary);
+}
+
+.footer a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: var(--accent-color);
+}
+
+.footer .social-links a {
+  color: var(--text-secondary);
+  transition: 0.3s;
+}
+
+.footer .social-links a:hover {
+  color: white;
+  background: var(--primary-color);
+  border-radius: 50%;
+  padding: 0.5rem;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.footer-section h5 {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.footer-section ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.footer-section li {
+  margin-bottom: 0.5rem;
+}
+
   table.table {
     background-color: var(--card-bg);
     color: var(--text-primary);

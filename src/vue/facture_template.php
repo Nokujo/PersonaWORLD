@@ -1,68 +1,139 @@
 <style>
-  .facture {
-    font-family: Arial, sans-serif;
+  body {
+    font-family: 'Arial', sans-serif;
     font-size: 13px;
-    padding: 30px;
     color: #111;
+    margin: 0;
+    padding: 40px;
+    background-color: #fff;
   }
 
-  .facture-header {
-    text-align: center;
-    margin-bottom: 20px;
+  .facture {
+    border: 1px solid #ddd;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: auto;
   }
 
   .facture-title {
     font-size: 24px;
-    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+  }
+
+  .facture-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .logo-container img {
+    height: 60px;
+  }
+
+  .logo-container .entreprise-nom {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .facture-header .infos {
+    text-align: right;
+    font-size: 14px;
   }
 
   .facture-date {
-    font-size: 14px;
-    color: #444;
+    color: #555;
   }
 
   .facture-client {
     font-size: 14px;
-    margin: 10px 0 20px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    padding: 12px 15px;
+    border-left: 4px solid #d90429;
+    line-height: 1.6;
   }
 
-  .facture-table {
+  table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px;
   }
 
-  .facture-table th,
-  .facture-table td {
-    border: 1px solid #aaa;
-    padding: 8px;
-    text-align: left;
+  th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    vertical-align: middle;
     font-size: 13px;
   }
 
-  .facture-table th {
+  th {
+    background-color: #f5f5f5;
+    text-align: left;
+  }
+
+  .product-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .facture-total {
+    font-weight: bold;
     background-color: #f0f0f0;
   }
 
-  .facture-total td {
-    font-weight: bold;
-    background-color: #f9f9f9;
+  .text-right {
+    text-align: right;
+  }
+
+  .footer-thanks {
+    margin-top: 30px;
+    font-style: italic;
+    text-align: center;
+    font-size: 12px;
+    color: #666;
   }
 </style>
 
 <div class="facture">
+  <div class="facture-title">Facture</div>
+
   <div class="facture-header">
-    <h1 class="facture-title">Facture n°<?= $details[0]['id'] ?></h1>
-    <p class="facture-date"><strong>Date :</strong> <?= $details[0]['dateCommande'] ?></p>
+    <div class="logo-container">
+      <img src="../public/img/logo.png" alt="Logo">
+      <div class="entreprise-nom">Persona World</div>
+    </div>
+    <div class="infos">
+      <div><strong>Facture n°<?= $details[0]['idCommande'] ?></strong></div>
+      <div class="facture-date">Date : <?= $details[0]['dateCommande'] ?></div>
+    </div>
   </div>
 
   <div class="facture-client">
     <p><strong>Client :</strong> <?= ucfirst($details[0]['prenom']) . ' ' . strtoupper($details[0]['nom']) ?></p>
+    <p><strong>Email :</strong> <?= $_SESSION['login'] ?></p>
   </div>
 
-  <table class="facture-table">
+  <table>
     <thead>
       <tr>
+        <th>Image</th>
         <th>Produit</th>
         <th>Prix unitaire</th>
         <th>Quantité</th>
@@ -70,11 +141,18 @@
       </tr>
     </thead>
     <tbody>
-      <?php $total = 0; foreach ($details as $ligne): 
+      <?php $total = 0; foreach ($details as $ligne):
         $ligneTotal = $ligne['prix'] * $ligne['quantite'];
         $total += $ligneTotal;
       ?>
       <tr>
+        <td>
+          <?php if (!empty($ligne['img'])): ?>
+            <img src="<?= $ligne['img'] ?>" class="product-img">
+          <?php else: ?>
+            <span style="color:#888;">N/A</span>
+          <?php endif; ?>
+        </td>
         <td><?= htmlspecialchars($ligne['produitNom']) ?></td>
         <td><?= number_format($ligne['prix'], 2) ?> €</td>
         <td><?= $ligne['quantite'] ?></td>
@@ -84,9 +162,11 @@
     </tbody>
     <tfoot>
       <tr class="facture-total">
-        <td colspan="3"><strong>Total</strong></td>
-        <td><strong><?= number_format($total, 2) ?> €</strong></td>
+        <td colspan="4" class="text-right">Total</td>
+        <td><?= number_format($total, 2) ?> €</td>
       </tr>
     </tfoot>
   </table>
+
+  <div class="footer-thanks">Merci pour votre confiance et à bientôt sur Persona World !</div>
 </div>

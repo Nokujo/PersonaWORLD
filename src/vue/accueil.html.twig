@@ -2,11 +2,6 @@
 {% block title %} {{ parent() }} Accueil {% endblock %}
 {% block contenu %}
 
-<div class="container my-4 text-center">
-  <input type="text" id="searchClient" class="form-control w-50 mx-auto" placeholder="Rechercher un produit…">
-  <ul id="suggestions" class="list-group w-50 mx-auto mt-2 text-left"></ul>
-</div>
-
 <!-- Hero section responsive -->
 <header class="hero d-flex align-items-center justify-content-center text-center">
   <div class="hero-content">
@@ -15,9 +10,6 @@
     <a href="#products" class="btn btn-primary btn-lg mt-3">Explorer les trésors</a>
   </div>
 </header>
-
-
-
 
 {% if session.login is defined %}
   <div class="alert alert-light text-center mt-4">
@@ -48,159 +40,132 @@
   <div class="container">
     <h2 class="mb-4 text-center">Catégories</h2>
     <div class="row text-center">
-      
       <div class="col-md-4 mb-3">
         <a href="index.php?page=accueil&type=figurine#products" class="text-reset text-decoration-none">
           <div class="card category-card h-100">
             <img src="img/bannerfigure.jpg" class="card-img-top" alt="Figurines">
-            <div class="card-body">
-              <h5 class="card-title">Figurines</h5>
-            </div>
+            <div class="card-body"><h5 class="card-title">Figurines</h5></div>
           </div>
         </a>
       </div>
-
       <div class="col-md-4 mb-3">
         <a href="index.php?page=accueil&type=vetement#products" class="text-reset text-decoration-none">
           <div class="card category-card h-100">
             <img src="img/bannervetement.png" class="card-img-top" alt="Vêtements">
-            <div class="card-body">
-              <h5 class="card-title">Vêtements</h5>
-            </div>
+            <div class="card-body"><h5 class="card-title">Vêtements</h5></div>
           </div>
         </a>
       </div>
-
       <div class="col-md-4 mb-3">
         <a href="index.php?page=accueil&type=accessoire#products" class="text-reset text-decoration-none">
           <div class="card category-card h-100">
             <img src="img/banneraccessoire.jpg" class="card-img-top" alt="Accessoires">
-            <div class="card-body">
-              <h5 class="card-title">Accessoires</h5>
-            </div>
+            <div class="card-body"><h5 class="card-title">Accessoires</h5></div>
           </div>
         </a>
       </div>
-
     </div>
   </div>
 </section>
 
 {% if type is defined and type %}
   <div class="text-center mb-4">
-    <a href="index.php?page=accueil#products" class="btn btn-outline-light">
-      🔄 Afficher tous les produits
-    </a>
+    <a href="index.php?page=accueil#products" class="btn btn-outline-light">Afficher tous les produits</a>
   </div>
 {% endif %}
 
-
-
 <section id="products" class="products py-5">
   <div class="container">
-   <h2 class="mb-2">Nos produits</h2>
+    <h2 class="mb-2">Nos produits</h2>
+
+    <div class="input-group mb-4">
+      <input type="text" id="rechercheProduit" class="form-control" placeholder=" Rechercher...">
+    </div>
+
     {% if type is defined and type %}
-    <h5 class="mb-4 text-info font-italic">Catégorie : {{ type|capitalize }}</h5>
+      <h5 class="mb-4 text-info font-italic">Catégorie : {{ type|capitalize }}</h5>
     {% endif %}
 
     <div class="row">
       {% for p in liste %}
-        <div class="col-md-3 mb-4">
-          {% if session.role is defined and session.role == 1 %}
-            <div class="card h-100">
-              {% if p.img %}<img src="{{ p.img }}" class="card-img-top" alt="{{ p.nom }}">{% endif %}
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ p.nom }}</h5>
-                <p class="card-text mt-auto"><strong>{{ p.prix }} €</strong></p>
-                <a href="index.php?page=produitModif&id={{ p.id }}" class="btn btn-outline-primary btn-sm">Modifier</a>
-              </div>
-            </div>
-          {% else %}
-            <div class="card h-100 d-flex flex-column justify-content-between">
-              <a href="#" class="text-decoration-none text-reset" data-toggle="modal" data-target="#modal-{{ p.id }}">
+        <div class="col-md-3 mb-4 carte-produit">
+          <div class="card h-100 d-flex flex-column justify-content-between">
+            <a href="#" class="text-decoration-none text-reset" data-toggle="modal" data-target="#modal-{{ p.id }}">
               {% if p.img %}
-  <img src="{{ p.img }}" class="card-img-top" alt="{{ p.nom }}">
-{% else %}
-  <div class="text-muted text-center py-5">Pas d'image</div>
-{% endif %}
-
-
-                <div class="card-body">
-                  <h5 class="card-title">{{ p.nom }}</h5>
-                  <p class="card-text"><strong>{{ p.prix }} €</strong></p>
-                </div>
-              </a>
-              {% if session.role is defined and session.role != 1 %}
-                <div class="card-footer text-center">
-                  <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-sm btn-primary">Ajouter au panier</a>
-                </div>
+                <img src="{{ p.img }}" class="card-img-top" alt="{{ p.nom }}">
+              {% else %}
+                <div class="text-muted text-center py-5">Pas d'image</div>
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title nom-produit">{{ p.nom }}</h5>
+                <p class="card-text"><strong>{{ p.prix }} €</strong></p>
+              </div>
+            </a>
+            <div class="card-footer text-center">
+              {% if session.role is defined and session.role == 1 %}
+                <a href="index.php?page=produitModif&id={{ p.id }}" class="btn btn-sm btn-warning">Modifier</a>
+              {% else %}
+                <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-sm btn-primary">Ajouter au panier</a>
               {% endif %}
             </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="modal-{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content bg-dark text-light">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel{{ p.id }}">{{ p.nom }}</h5>
-                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <img src="{{ p.img }}" class="img-fluid mb-3">
-                    <p class="text-secondary">{{ p.description }}</p>
-                    <p><strong>{{ p.prix }} €</strong></p>
-                    <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-primary">Ajouter au panier</a>
-                  </div>
+          </div>
+
+          <!-- Modal -->
+          <div class="modal fade" id="modal-{{ p.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ p.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content bg-dark text-light">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalLabel{{ p.id }}">{{ p.nom }}</h5>
+                  <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img src="{{ p.img }}" class="img-fluid mb-3">
+                  <p class="text-secondary">{{ p.description }}</p>
+                  <p><strong>{{ p.prix }} €</strong></p>
+                  <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-primary">Ajouter au panier</a>
                 </div>
               </div>
             </div>
-
-          {% endif %}
+          </div>
         </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<footer class="footer">
+<footer class="footer mt-5">
   <div class="container">
-    <div class="footer-grid">
-      <div class="footer-section">
-        <h3>À propos</h3>
-        <p>Projet hommage non officiel à l'univers Persona. Créé par des fans, pour les fans.</p>
+    <div class="row footer-grid text-center text-md-left">
+      <div class="col-md-3 mb-4 footer-section">
+        <h5>À propos</h5>
+        <p class="small">Plateforme non officielle dédiée au merchandising de l'univers Persona.</p>
       </div>
-      <div class="footer-section">
-        <h3>Navigation</h3>
-        <ul>
+      <div class="col-md-3 mb-4 footer-section">
+        <h5>Navigation</h5>
+        <ul class="list-unstyled">
           <li><a href="#products">Produits</a></li>
           {% if session.login is not defined %}
-            <li><a href="index.php?page=connexion">Connexion</a></li>
-            <li><a href="index.php?page=inscrire">Inscription</a></li>
+          <li><a href="index.php?page=connexion">Connexion</a></li>
+          <li><a href="index.php?page=inscrire">Inscription</a></li>
           {% endif %}
         </ul>
       </div>
-      <div class="footer-section">
-        <h3>Support</h3>
-        <ul>
-          <li><i class="fas fa-envelope"></i> support@velvetmail.com</li>
-          <li><i class="fas fa-phone"></i> +33 7 00 00 00 00</li>
+      <div class="col-md-3 mb-4 footer-section">
+        <h5>Support</h5>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-envelope mr-2"></i> support@velvetmail.com</li>
+          <li><i class="fas fa-phone mr-2"></i> +33 7 00 00 00 00</li>
         </ul>
       </div>
-      <div class="footer-section">
-        <h3>Réseaux</h3>
-        <div class="social-links">
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-discord"></i></a>
-          <a href="#"><i class="fab fa-x-twitter"></i></a>
-        </div>
-      </div>
+     
     </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 Persona WORLD. Tous droits réservés.</p>
+    <div class="footer-bottom mt-4 text-center">
+      <p class="small mb-1">&copy; 2025 Persona WORLD. Tous droits réservés.</p>
       <div class="footer-links">
-        <a href="#">Mentions légales</a>
+        <a href="#" class="mr-3">Mentions légales</a>
         <a href="#">Confidentialité</a>
       </div>
     </div>
@@ -208,33 +173,16 @@
 </footer>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('searchClient');
-  const suggestions = document.getElementById('suggestions');
-
-  input.addEventListener('input', () => {
-    const query = input.value.trim();
-    if (query.length < 2) {
-      suggestions.innerHTML = '';
-      return;
-    }
-
-    fetch(`index.php?suggestion=${encodeURIComponent(query)}`)
-      .then(res => res.json())
-      .then(data => {
-        suggestions.innerHTML = '';
-        data.forEach(p => {
-          const li = document.createElement('li');
-          li.className = 'list-group-item list-group-item-dark';
-          li.textContent = p.nom;
-          li.addEventListener('click', () => {
-            window.location.href = `index.php?page=produitfiche&id=${p.id}`;
-          });
-          suggestions.appendChild(li);
-        });
+  document.addEventListener('DOMContentLoaded', () => {
+    const champ = document.getElementById('rechercheProduit');
+    champ.addEventListener('input', () => {
+      const terme = champ.value.toLowerCase();
+      document.querySelectorAll('.carte-produit').forEach(carte => {
+        const nom = carte.querySelector('.nom-produit').textContent.toLowerCase();
+        carte.style.display = nom.includes(terme) ? 'block' : 'none';
       });
+    });
   });
-});
 </script>
 
 {% endblock %}
