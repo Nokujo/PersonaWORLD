@@ -13,7 +13,7 @@ class Utilisateur {
         $this->db = $db;
 
         $this->select = $this->db->prepare("
-            SELECT u.id, u.email, u.nom, u.prenom, u.idRole, r.libelle AS libellerole
+            SELECT u.id, u.email, u.nuser,u.nom, u.prenom, u.idRole, r.libelle AS libellerole
             FROM utilisateur u
             JOIN role r ON u.idRole = r.id
             ORDER BY u.nom
@@ -25,9 +25,10 @@ class Utilisateur {
 
         $this->update = $this->db->prepare("
             UPDATE utilisateur
-            SET nom = :nom, prenom = :prenom, idRole = :role, email = :email
+            SET nom = :nom, prenom = :prenom, idRole = :role, email = :email, nuser = :nuser
             WHERE id = :id
         ");
+
 
         $this->updateMdp = $this->db->prepare("
             UPDATE utilisateur
@@ -59,16 +60,18 @@ class Utilisateur {
         return $this->selectById->fetch();
     }
 
-    public function update($id, $role, $nom, $prenom, $email) {
-        $this->update->execute([
-            ':id' => $id,
-            ':role' => $role,
-            ':nom' => $nom,
-            ':prenom' => $prenom,
-            ':email' => $email
-        ]);
-        return $this->update->errorCode() == 0;
-    }
+    public function update($id, $email, $nom, $prenom, $nuser, $role) {
+    $this->update->execute([
+        ':id' => $id,
+        ':role' => $role,
+        ':nom' => $nom,
+        ':prenom' => $prenom,
+        ':email' => $email,
+        ':nuser' => $nuser
+    ]);
+    return $this->update->errorCode() == 0;
+}
+
 
     public function updateMdp($id, $mdp) {
         $hash = password_hash($mdp, PASSWORD_DEFAULT);

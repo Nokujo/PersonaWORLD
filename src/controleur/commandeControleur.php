@@ -29,8 +29,15 @@ function commandeControleur($twig, $db) {
     $filtre = $_GET['filtre'] ?? null;
 
     if ($filtre && in_array($filtre, [1, 2])) {
-        $sql = "SELECT * FROM commande WHERE idEtat = :etat ORDER BY dateCommande DESC";
-        $stmt = $db->prepare($sql);
+       $sql = "
+            SELECT c.*, e.libelle AS etatLibelle, u.nom, u.prenom
+            FROM commande c
+            JOIN etat e ON c.idEtat = e.id
+            JOIN utilisateur u ON c.idUtilisateur = u.id
+            WHERE c.idEtat = :etat
+            ORDER BY c.dateCommande DESC
+            ";
+$stmt = $db->prepare($sql);
         $stmt->execute([':etat' => $filtre]);
         $commandes = $stmt->fetchAll();
     } else {
@@ -39,10 +46,15 @@ function commandeControleur($twig, $db) {
     
 
     foreach ($commandes as &$cmd) {
-        $cmd['produits'] = $composerModel->selectByCommandeId($cmd['id']);
-        $util = $utilisateurModel->selectById($cmd['idUtilisateur']);
+    $cmd['produits'] = $composerModel->selectByCommandeId($cmd['id']);
+    $util = $utilisateurModel->selectById($cmd['idUtilisateur']);
+    if ($util && is_array($util)) {
         $cmd['client'] = $util['prenom'] . ' ' . $util['nom'];
+    } else {
+        $cmd['client'] = "Utilisateur inconnu";
     }
+}
+
 
     echo $twig->render('commande.html.twig', [
         'commandes' => $commandes,

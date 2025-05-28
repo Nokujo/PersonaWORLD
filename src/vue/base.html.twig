@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+
   <link rel="stylesheet" href="css/style.css?v={{ "now"|date("U") }}">
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 
@@ -26,66 +27,81 @@
 
 
 <!-- NAVBAR -->
-<nav class="navbar">
-  <div class="nav-container">
-    <div class="nav-left">
-      <div class="nav-logo">
-        <img src="./img/logo.webp" alt="Logo" class="logo">
-        <span>Persona WORLD</span>
-      </div>
-    </div>
-    <div class="nav-right">
-      <div class="nav-links">
-        <a href="index.php?page=accueil" class="active">Accueil</a>
-        <a href="index.php?page=accueil#products">Boutique</a>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: var(--nav-bg); backdrop-filter: blur(12px); box-shadow: var(--shadow);">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="index.php?page=accueil">
+      <img src="./img/logo.webp" alt="Logo" class="logo mr-2" style="width: 40px; height: 40px; border-radius: 50%;">
+      Persona WORLD
+    </a>
+
+    {% if session.role is not defined or session.role != 1 %}
+      <a href="index.php?page=panier" class="btn btn-outline-light ml-auto d-lg-none">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">
+          {% if session.panier is defined %}
+            {{ session.panier|length }}
+          {% else %}
+            0
+          {% endif %}
+        </span>
+        Panier
+      </a>
+    {% endif %}
+
+    <button class="navbar-toggler ml-2" type="button" data-toggle="collapse" data-target="#navbarPW" aria-controls="navbarPW" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarPW">
+      <ul class="navbar-nav align-items-center">
+        <li class="nav-item"><a class="nav-link" href="index.php?page=accueil">Accueil</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.php?page=accueil#products">Boutique</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.php?page=contact">Contact</a></li>
 
         {% if session.login is defined %}
-          <a href="#"> {{ session.login }}</a>
-          <a href="index.php?page=deconnexion">Se déconnecter</a>
+          <li class="nav-item"><a class="nav-link" href="#"> {{ session.login }}</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.php?page=deconnexion">Se déconnecter</a></li>
 
           {% if session.role == 1 %}
-          <div class="dropdown">
-            <a class="btn btn-outline-warning dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Administration
-            </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="index.php?page=produit">Produit</a>
-              <a class="dropdown-item" href="index.php?page=produitAjout">Ajouter produit</a>
-              <a class="dropdown-item" href="index.php?page=type">Type</a>
-              <a class="dropdown-item" href="index.php?page=utilisateur">Utilisateur</a>
-              <a class="dropdown-item" href="index.php?page=commande">Commandes</a>
-            </div>
-          </div>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Administration
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminMenu">
+                <a class="dropdown-item" href="index.php?page=produit">Produit</a>
+                <a class="dropdown-item" href="index.php?page=produitAjout">Ajouter produit</a>
+                <a class="dropdown-item" href="index.php?page=type">Type</a>
+                <a class="dropdown-item" href="index.php?page=utilisateur">Utilisateur</a>
+                <a class="dropdown-item" href="index.php?page=commande">Commandes</a>
+              </div>
+            </li>
           {% endif %}
-
         {% else %}
-          <a href="index.php?page=connexion">Connexion</a>
-          <a href="index.php?page=inscrire">Inscription</a>
+          <li class="nav-item"><a class="nav-link" href="index.php?page=connexion">Connexion</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.php?page=inscrire">Inscription</a></li>
         {% endif %}
-
-        <button class="theme-toggle" id="themeToggle">
-          <i class="fas fa-moon"></i>
-        </button>
 
         {% if session.role is not defined or session.role != 1 %}
-        <div class="cart-icon">
-          <a href="index.php?page=panier" class="text-reset text-decoration-none">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-count">
-              {% if session.panier is defined %}
-                {{ session.panier|length }}
-              {% else %}
-                0
-              {% endif %}
-            </span>
-            Panier
-          </a>
-        </div>
+          <li class="nav-item d-none d-lg-block">
+            <a href="index.php?page=panier" class="nav-link position-relative">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-count">
+                {% if session.panier is defined %}
+                  {{ session.panier|length }}
+                {% else %}
+                  0
+                {% endif %}
+              </span>
+              Panier
+            </a>
+          </li>
         {% endif %}
-      </div>
+      </ul>
     </div>
   </div>
 </nav>
+
+
 
 <!-- CONTENU DYNAMIQUE -->
 {% block contenu %}

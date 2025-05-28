@@ -25,6 +25,7 @@
               <input type="checkbox" id="selectAll">
             </th>
             <th>Email</th>
+            <th>Pseudo</th>
             <th>Nom</th>
             <th>Prénom</th>
             <th>Rôle</th>
@@ -39,6 +40,7 @@
                 <input type="checkbox" name="cocher[]" value="{{ u.id }}">
               </td>
               <td>{{ u.email }}</td>
+              <td>{{ u.nuser }}</td>
               <td>{{ u.nom }}</td>
               <td>{{ u.prenom }}</td>
               <td>{{ u.libellerole }}</td>

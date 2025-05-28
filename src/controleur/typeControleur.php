@@ -39,6 +39,15 @@ if (session_status() === PHP_SESSION_NONE) {
         'form'  => $form,
         'liste' => $liste
     ]);
+
+    // 0) Ajout d’un nouveau type
+if (isset($_POST['btAjouter']) && !empty($_POST['libelle'])) {
+    $libelle = trim($_POST['libelle']);
+    $etat = $m->insert($libelle);
+    $form['etatAjout'] = $etat;
+    $form['msgAjout'] = $etat ? 'Type ajouté avec succès' : 'Erreur lors de l\'ajout';
+}
+
 }
 
 function typeModifControleur($twig, $db) {

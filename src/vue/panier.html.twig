@@ -51,7 +51,12 @@
       <div class="text-right mb-3"><strong>Total : {{ total }} €</strong></div>
       <input type="hidden" name="montant" value="{{ total }}">
       <button type="submit" name="update" class="btn btn-secondary">Mettre à jour</button>
-      <button type="submit" name="placerCommande" class="btn btn-primary">Passer la commande</button>
+     {% if session.login is defined %}
+  <button type="submit" name="placerCommande" class="btn btn-primary">Passer commande</button>
+{% else %}
+  <div class="alert alert-warning mt-3">Vous devez être connecté pour valider votre commande.</div>
+{% endif %}
+
     </form>
 
   {% else %}

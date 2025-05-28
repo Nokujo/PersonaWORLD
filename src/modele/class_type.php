@@ -4,21 +4,18 @@ class Type {
     private $select;
     private $selectById;
     private $update;
+    private $insert;
     private $delete;
 
 
     public function __construct($db) {
-        $this->db          = $db;
-        $this->select      = $db->prepare("SELECT id, libelle FROM type");
-        $this->selectById  = $db->prepare("SELECT * FROM type WHERE id = :id");
-        $this->update      = $db->prepare("
-            UPDATE type
-            SET libelle = :libelle
-            WHERE id = :id
-        ");
-        $this->delete = $db->prepare("DELETE FROM type WHERE id = :id");
-
-    }
+    $this->db = $db;
+    $this->select = $db->prepare("SELECT id, libelle FROM type");
+    $this->selectById = $db->prepare("SELECT * FROM type WHERE id = :id");
+    $this->update = $db->prepare("UPDATE type SET libelle = :libelle WHERE id = :id");
+    $this->delete = $db->prepare("DELETE FROM type WHERE id = :id");
+    $this->insert = $db->prepare("INSERT INTO type(libelle) VALUES (:libelle)");
+}
 
     public function select() {
         $this->select->execute();
@@ -47,5 +44,10 @@ class Type {
         }
         return $r;
     }
+
+    public function insert($libelle) {
+    $this->insert->execute([':libelle' => $libelle]);
+    return $this->insert->errorCode() === '00000';
+}
     
 }

@@ -1,4 +1,7 @@
+
+
 <style>
+
   body {
     font-family: 'Arial', sans-serif;
     font-size: 13px;
@@ -87,11 +90,14 @@
   }
 
   .product-img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    display: block;
-  }
+  height: auto;
+  max-height: 80px;      /* limite raisonnable pour éviter les images trop grandes */
+  width: auto;
+  max-width: 100px;
+  display: block;
+  object-fit: contain;   /* affiche l'image entière sans l’écraser */
+}
+
 
   .facture-total {
     font-weight: bold;
@@ -119,15 +125,17 @@
       <img src="../public/img/logo.png" alt="Logo">
       <div class="entreprise-nom">Persona World</div>
     </div>
-    <div class="infos">
-      <div><strong>Facture n°<?= $details[0]['idCommande'] ?></strong></div>
-      <div class="facture-date">Date : <?= $details[0]['dateCommande'] ?></div>
-    </div>
-  </div>
+   <div class="infos">
+  <div><strong>Facture n°<?php echo $detailsCopy[0]['idCommande']; ?></strong></div>
+  <div class="facture-date">Date : <?php echo $detailsCopy[0]['dateCommande']; ?></div>
+</div>
+</div>
 
   <div class="facture-client">
-    <p><strong>Client :</strong> <?= ucfirst($details[0]['prenom']) . ' ' . strtoupper($details[0]['nom']) ?></p>
-    <p><strong>Email :</strong> <?= $_SESSION['login'] ?></p>
+    <p><strong>Client :</strong> <?php echo ucfirst($detailsCopy[0]['prenom']) . ' ' . strtoupper($detailsCopy[0]['nom']); ?></p>
+
+    <p><strong>Email :</strong> <?php echo $_SESSION['login']; ?></p>
+
   </div>
 
   <table>
@@ -141,7 +149,7 @@
       </tr>
     </thead>
     <tbody>
-      <?php $total = 0; foreach ($details as $ligne):
+      <?php $total = 0; foreach ($detailsCopy as $ligne):
         $ligneTotal = $ligne['prix'] * $ligne['quantite'];
         $total += $ligneTotal;
       ?>

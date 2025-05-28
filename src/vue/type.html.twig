@@ -14,9 +14,22 @@
   <button id="toggleSelectType" class="btn btn-secondary mb-3">
     Sélection
   </button>
-
+ <div class="card bg-dark text-light mb-4 p-3">
+  <h5>Ajouter une nouvelle catégorie</h5>
+  {% if form.etatAjout is defined %}
+    <div class="alert alert-{{ form.etatAjout ? 'success' : 'danger' }} mt-2">
+      {{ form.msgAjout }}
+    </div>
+  {% endif %}
+  <form action="index.php?page=type" method="post" class="form-inline mt-2">
+    <input type="text" name="libelle" class="form-control mr-2" placeholder="Ex : Goodies" required>
+    <button type="submit" name="btAjouter" class="btn btn-success">Ajouter</button>
+  </form>
+</div>
   <form id="typeForm" action="index.php?page=type" method="post">
     <div class="table-responsive">
+   
+
       <table class="table table-dark table-bordered table-hover">
         <thead>
           <tr>

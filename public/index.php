@@ -34,5 +34,5 @@ $twig = new \Twig\Environment($loader, []);
 $twig->addGlobal('session', $_SESSION);
 
 $db = connect();
-$nomFonction = getPage($db);  // Ex: "accueilControleur"
-$nomFonction($twig, $db);     // appel direct, la vérif se fait dans le contrôleur
+$nomFonction = getPage($db); 
+$nomFonction($twig, $db);    

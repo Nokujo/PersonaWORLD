@@ -34,10 +34,13 @@ function factureControleur($twig, $db) {
 
     $commandeModel = new Commande($db);
     $details = $commandeModel->selectWithProduits($idCommande);
-    if (!$details || count($details) === 0) {
-        echo "❌ Commande introuvable.";
-        return;
-    }
+if (!is_array($details) || count($details) === 0) {
+    echo "❌ Commande introuvable.";
+    return;
+}
+$detailsCopy = $details; // pour le template
+
+
 
     if ($_SESSION['role'] == 2 && $details[0]['idUtilisateur'] != $_SESSION['id']) {
         echo "⛔ Accès interdit à cette facture.";
@@ -45,10 +48,12 @@ function factureControleur($twig, $db) {
     }
 
     foreach ($details as &$ligne) {
-        if (!empty($ligne['img'])) {
-            $ligne['img'] = getImageBase64($ligne['img']);
-        }
+    if (!empty($ligne['img'])) {
+        $ligne['img'] = getImageBase64($ligne['img']); // applique base64 à chaque image
     }
+}
+$detailsCopy = $details;
+
 
     $nomFichier = 'facture_' . $idCommande . '.pdf';
     $cheminFichier = __DIR__ . '/../../factures/' . $nomFichier;
@@ -66,17 +71,14 @@ try {
 
     // Enregistre temporairement pour le mail
     $cheminFichier = __DIR__ . '/../facture_temp.pdf';
-    $pdf->output($cheminFichier, 'F'); // Enregistre pour le mail
-
-    // Ré-affiche dans le navigateur
-    $pdf->output('facture_' . $idCommande . '.pdf', 'D'); // 'D' pour affichage/téléchargement
+    $pdf->output($cheminFichier, 'F'); // pour pièce jointe
 
 } catch (Exception $e) {
     echo "Erreur PDF : " . $e->getMessage();
     return;
 }
 
-// 📧 Envoi mail (après affichage)
+// 📧 Envoi mail (AVANT affichage)
 $mail = new PHPMailer(true);
 
 try {
@@ -84,7 +86,7 @@ try {
     $mail->Host = 'smtp.gmail.com';
     $mail->SMTPAuth = true;
     $mail->Username = 'mustaphachouhani2@gmail.com';
-    $mail->Password = 'iydn cewu pbzq fsic';
+    $mail->Password = 'xtitlcvydzqpppwl';
     $mail->SMTPSecure = 'tls';
     $mail->Port = 587;
 
@@ -92,15 +94,20 @@ try {
     $mail->addAddress($_SESSION['login']);
     $mail->addAttachment($cheminFichier); // en pièce jointe
 
-    $mail->isHTML(true);
-    $mail->Subject = '📎 Votre facture Persona World';
-    $mail->Body    = 'Merci pour votre commande ! Vous trouverez ci-joint votre facture au format PDF.';
+   $mail->isHTML(true);
+$mail->CharSet = 'UTF-8';
+$mail->Subject = '📎 Votre facture Persona World';
+$mail->Body    = 'Merci pour votre commande ! Vous trouverez ci-joint votre facture au format PDF.';
 
     $mail->send();
+
     unlink($cheminFichier); // nettoyage
 } catch (Exception $e) {
-    // Ne rien afficher dans le navigateur
-    error_log("Erreur mail : " . $mail->ErrorInfo); // enregistre l’erreur côté serveur
+    error_log("Erreur mail : " . $mail->ErrorInfo);
 }
+
+// ✅ Affiche ensuite le PDF dans le navigateur
+$pdf->output('facture_' . $idCommande . '.pdf', 'D');
+
 
 }

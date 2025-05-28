@@ -62,9 +62,14 @@ function utilisateurModifControleur($twig, $db) {
         $prenom = $_POST['prenom'];
         $email = $_POST['email'];
         $role = $_POST['role'];
+        $nuser = $_POST['nuser']; // ← récup du pseudo
 
-        $ok = $utilisateur->update($id, $role, $nom, $prenom, $email);
+        // Ajout du pseudo dans la méthode update
+        $ok = $utilisateur->update($id, $email, $nom, $prenom, $nuser, $role);
 
+
+
+        // Gestion du mot de passe si modifié
         if (!empty($_POST['inputPassword'])) {
             if ($_POST['inputPassword'] == $_POST['inputPassword2']) {
                 $utilisateur->updateMdp($id, $_POST['inputPassword']);
@@ -78,6 +83,11 @@ function utilisateurModifControleur($twig, $db) {
             $form['valide'] = $ok;
             $form['message'] = $ok ? 'Modification réussie' : 'Erreur lors de la modification';
         }
+
+        // Recharge l'utilisateur et les rôles pour afficher les champs remplis à jour
+        $form['utilisateur'] = $utilisateur->selectById($id);
+        $role = new Role($db);
+        $form['roles'] = $role->select();
     } else {
         $form['message'] = 'Utilisateur non précisé';
     }

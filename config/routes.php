@@ -13,6 +13,8 @@ function getPage($db) {
         // Utilisateur
         'utilisateur'       => 'utilisateurControleur',
         'utilisateurModif'  => 'utilisateurModifControleur',
+        'validation'        => 'validationControleur',
+
 
         // Type
         'type'              => 'typeControleur',
@@ -31,6 +33,10 @@ function getPage($db) {
 
         // Commande
         'facture'           => 'factureControleur',
+
+        //Contact 
+        'contact'           =>  'contactControleur',
+
     ];
 
     if ($db !== null) {

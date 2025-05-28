@@ -37,7 +37,14 @@ function panierControleur($twig, $db){
 
         // 🔐 Récupération du client
         $util    = new Utilisateur($db);
-        $unUtil  = $util->selectByEmail($_SESSION['login']);
+       if (!isset($_SESSION['login'])) {
+    $form['valide'] = false;
+    $form['message'] = "Vous devez être connecté pour passer une commande.";
+} else {
+    $unUtil  = $util->selectByEmail($_SESSION['login']);
+    $idUser  = $unUtil['id'] ?? null;
+}
+
         $idUser  = $unUtil['id'] ?? null;
 
         if ($idUser) {
@@ -57,7 +64,23 @@ function panierControleur($twig, $db){
                 $form['message']    = '✅ Commande passée avec succès.';
                 $form['commandeOK'] = true;
                 $form['idCommande'] = $idCommande;
-
+                
+                foreach ($_SESSION['panier'] as $idProduit => $qteAchetee) {
+                    // Récupérer la quantité actuelle
+                    $stmt = $db->prepare("SELECT quantite FROM produits WHERE id = :id");
+                    $stmt->bindValue(':id', $idProduit, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $produit = $stmt->fetch();
+                
+                    if ($produit) {
+                        $nouvelleQuantite = max(0, $produit['quantite'] - $qteAchetee);
+                        $update = $db->prepare("UPDATE produits SET quantite = :qte WHERE id = :id");
+                        $update->bindValue(':qte', $nouvelleQuantite, PDO::PARAM_INT);
+                        $update->bindValue(':id', $idProduit, PDO::PARAM_INT);
+                        $update->execute();
+                    }
+                }
+                
                 unset($_SESSION['panier']);
             } else {
                 $form['valide']  = false;
@@ -65,9 +88,12 @@ function panierControleur($twig, $db){
             }
         } else {
             $form['valide']  = false;
-            $form['message'] = 'Utilisateur introuvable.';
+            $form['message'] = 'Veuillez vous connectez ou créer un compte.';
         }
     }
+
+    
+    
 
     // 🧾 Récupération des produits si panier non vide
     if (!empty($_SESSION['panier'])) {

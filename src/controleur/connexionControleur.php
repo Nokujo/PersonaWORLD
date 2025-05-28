@@ -3,19 +3,14 @@ function connexionControleur($twig) {
    if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-
-
     require_once(__DIR__ . '/../../config/connexion.php'); // ✅
-
-
     $form = [];
 
     if (isset($_POST['btnConnexion'])) {
         $email = $_POST['inputEmail'];
         $password = $_POST['inputPassword'];
 
-        $db = connect(); // ✅ autochargé
+        $db = connect(); 
 
         if ($db !== null) {
             $sql = "SELECT * FROM utilisateur WHERE email = ?";
@@ -28,7 +23,7 @@ function connexionControleur($twig) {
                     $_SESSION['role']  = $user['idRole'];
                     $_SESSION['id']    = $user['id'];
 
-                    session_write_close(); // ✅ ici AVANT le header()
+                    session_write_close(); 
 
                     if ($_SESSION['role'] == 3) {
                         header("Location: index.php?page=produit");

@@ -2,6 +2,11 @@
 {% block title %} {{ parent() }} Accueil {% endblock %}
 {% block contenu %}
 
+{% if session.login is defined %}
+  <div class="alert alert-light text-center mt-4">
+    Connecté en tant que <strong>{{ session.login }}</strong>
+    {% if session.role == 1 %}(Administrateur){% else %}(Client){% endif %}
+  </div>
 <!-- Hero section responsive -->
 <header class="hero d-flex align-items-center justify-content-center text-center">
   <div class="hero-content">
@@ -11,11 +16,7 @@
   </div>
 </header>
 
-{% if session.login is defined %}
-  <div class="alert alert-light text-center mt-4">
-    Connecté en tant que <strong>{{ session.login }}</strong>
-    {% if session.role == 1 %}(Administrateur){% else %}(Client){% endif %}
-  </div>
+
 
   {% if session.role == 1 %}
     <div class="container my-4 text-center">
@@ -79,8 +80,16 @@
     <h2 class="mb-2">Nos produits</h2>
 
     <div class="input-group mb-4">
-      <input type="text" id="rechercheProduit" class="form-control" placeholder=" Rechercher...">
-    </div>
+  <input type="text" id="rechercheProduit" class="form-control" placeholder=" Rechercher...">
+  <select id="triProduit" class="custom-select ml-2 w-auto">
+    <option value="">Trier par…</option>
+    <option value="prix_asc">Prix croissant</option>
+    <option value="prix_desc">Prix décroissant</option>
+    <option value="nom_asc">Nom A → Z</option>
+    <option value="nom_desc">Nom Z → A</option>
+  </select>
+</div>
+
 
     {% if type is defined and type %}
       <h5 class="mb-4 text-info font-italic">Catégorie : {{ type|capitalize }}</h5>
@@ -101,13 +110,18 @@
                 <p class="card-text"><strong>{{ p.prix }} €</strong></p>
               </div>
             </a>
-            <div class="card-footer text-center">
-              {% if session.role is defined and session.role == 1 %}
-                <a href="index.php?page=produitModif&id={{ p.id }}" class="btn btn-sm btn-warning">Modifier</a>
-              {% else %}
-                <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-sm btn-primary">Ajouter au panier</a>
-              {% endif %}
-            </div>
+        <div class="card-footer text-center">
+        {% if p.quantite == 0 %}
+          <span class="badge badge-danger d-block mb-2">Rupture de stock</span>
+          <button class="btn btn-sm btn-secondary" disabled>Indisponible</button>
+        {% else %}
+          {% if session.role is defined and session.role == 1 %}
+            <a href="index.php?page=produitModif&id={{ p.id }}" class="btn btn-sm btn-warning">Modifier</a>
+          {% else %}
+            <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-sm btn-primary">Ajouter au panier</a>
+          {% endif %}
+        {% endif %}
+      </div>
 
           </div>
 
@@ -125,7 +139,12 @@
                   <img src="{{ p.img }}" class="img-fluid mb-3">
                   <p class="text-secondary">{{ p.description }}</p>
                   <p><strong>{{ p.prix }} €</strong></p>
-                  <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-primary">Ajouter au panier</a>
+                  {% if session.role is defined and session.role == 1 %}
+            <a href="index.php?page=produitModif&id={{ p.id }}" class="btn btn-sm btn-warning">Modifier</a>
+          {% else %}
+            <a href="index.php?page=ajoutPanier&id={{ p.id }}" class="btn btn-sm btn-primary">Ajouter au panier</a>
+          {% endif %}
+        
                 </div>
               </div>
             </div>
@@ -156,8 +175,8 @@
       <div class="col-md-3 mb-4 footer-section">
         <h5>Support</h5>
         <ul class="list-unstyled">
-          <li><i class="fas fa-envelope mr-2"></i> support@velvetmail.com</li>
-          <li><i class="fas fa-phone mr-2"></i> +33 7 00 00 00 00</li>
+          <li><i class="fas fa-envelope mr-2"></i> support@personaworld.com</li>
+          <li><i class="fas fa-phone mr-2"></i>07 00 00 00 00</li>
         </ul>
       </div>
      
@@ -174,15 +193,47 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const champ = document.getElementById('rechercheProduit');
-    champ.addEventListener('input', () => {
-      const terme = champ.value.toLowerCase();
-      document.querySelectorAll('.carte-produit').forEach(carte => {
-        const nom = carte.querySelector('.nom-produit').textContent.toLowerCase();
-        carte.style.display = nom.includes(terme) ? 'block' : 'none';
-      });
+  const champ = document.getElementById('rechercheProduit');
+  const selectTri = document.getElementById('triProduit');
+
+  function filtrerEtTrier() {
+    const terme = champ.value.toLowerCase();
+    const tri = selectTri.value;
+
+    const cartes = Array.from(document.querySelectorAll('.carte-produit'));
+
+    cartes.forEach(carte => {
+      const nom = carte.querySelector('.nom-produit').textContent.toLowerCase();
+      carte.style.display = nom.includes(terme) ? 'block' : 'none';
     });
-  });
+
+    const visibles = cartes.filter(c => c.style.display !== 'none');
+
+    if (tri) {
+      visibles.sort((a, b) => {
+        const prixA = parseFloat(a.querySelector('.card-text').textContent);
+        const prixB = parseFloat(b.querySelector('.card-text').textContent);
+        const nomA = a.querySelector('.nom-produit').textContent.toLowerCase();
+        const nomB = b.querySelector('.nom-produit').textContent.toLowerCase();
+
+        switch (tri) {
+          case 'prix_asc': return prixA - prixB;
+          case 'prix_desc': return prixB - prixA;
+          case 'nom_asc': return nomA.localeCompare(nomB, 'fr');
+          case 'nom_desc': return nomB.localeCompare(nomA, 'fr');
+          default: return 0;
+        }
+      });
+
+      const row = document.querySelector('.products .row');
+      visibles.forEach(carte => row.appendChild(carte));
+    }
+  }
+
+  champ.addEventListener('input', filtrerEtTrier);
+  selectTri.addEventListener('change', filtrerEtTrier);
+});
+
 </script>
 
 {% endblock %}

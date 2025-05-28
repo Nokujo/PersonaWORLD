@@ -16,89 +16,81 @@
 {% if form.valide is defined %}
     {% if form.valide == true %}
         <div class="container mt-5 text-center">
-    <div class="alert alert-success shadow p-4">
-        <h1 class="display-4">Inscription réussie</h1>
-        <p class="lead">Bienvenue,</p>
-        <p>
-            {% if form.role == 1 %}
-                Vous êtes <strong>administrateur</strong> du site.
-            {% else %}
-                Vous êtes un <strong>client</strong> du site.
-            {% endif %}
-        </p>
-    </div>
-</div>
-
+            <div class="alert alert-info shadow p-4">
+                <h1 class="display-4">Demande envoyée</h1>
+                <p class="lead mt-3">
+                    Votre inscription a bien été prise en compte. Vous recevrez un e-mail de confirmation dès que l’administrateur aura validé votre compte.
+                </p>
+                <p class="text-muted mt-4">Merci pour votre confiance et bienvenue dans le Metaverse de Persona World</p>
+                <a href="index.php?page=accueil" class="btn btn-outline-primary mt-3">← Retour à l’accueil</a>
+            </div>
+        </div>
     {% else %}
         <div class="container mt-5 text-center">
-    <div class="alert alert-danger shadow p-4">
-        <h1 class="display-4">Échec de l'inscription</h1>
-        <p class="lead">{{ form.message }}</p>
-        <a href="index.php?page=inscrire" class="btn btn-outline-danger mt-3">Retourner à l'inscription</a>
-    </div>
-</div>
-
+            <div class="alert alert-danger shadow p-4">
+                <h1 class="display-4">Échec de l'inscription</h1>
+                <p class="lead">{{ form.message }}</p>
+                <a href="index.php?page=inscrire" class="btn btn-outline-danger mt-3">Retourner à l'inscription</a>
+            </div>
+        </div>
     {% endif %}
 {% else %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card bg-dark text-light shadow-lg">
-                <div class="card-body">
-                    <h2 class="text-center mb-4">Inscription à Persona WORLD</h2>
-                    <p class="text-center text-muted mb-4">Entrez dans l’univers Persona</p>
-                    <form action="index.php?page=inscrire" method="post">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="prenom">Prénom</label>
-                                <input type="text" class="form-control" id="prenom" name="prenom" placeholder="" required>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card bg-dark text-light shadow-lg">
+                    <div class="card-body">
+                        <h2 class="text-center mb-4">Inscription à Persona WORLD</h2>
+                        <p class="text-center text-muted mb-4">Entrez dans l’univers Persona</p>
+                        <form action="index.php?page=inscrire" method="post">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="prenom">Prénom</label>
+                                    <input type="text" class="form-control" id="prenom" name="prenom" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="nom">Nom</label>
+                                    <input type="text" class="form-control" id="nom" name="nom" required>
+                                </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="nom">Nom</label>
-                                <input type="text" class="form-control" id="nom" name="nom" required>
+
+                            <div class="form-group">
+                                <label for="nuser">Nom utilisateur</label>
+                                <input type="text" class="form-control" id="nuser" name="nuser" required>
                             </div>
-                        </div>
 
-                         <div class="form-group">
-                            <label for="nuser">Nom utilisateur</label>
-                            <input type="text" class="form-control" id="nuser" name="nuser" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="email">Adresse Email</label>
+                                <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="joker@phantomthief.com" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="email">Adresse Email</label>
-                            <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="joker@phantomthief.com" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="mdp">Mot de passe</label>
+                                <input type="password" class="form-control" id="inputPassword" name="inputPassword" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="mdp">Mot de passe</label>
-                            <input type="password" class="form-control" id="inputPassword" name="inputPassword" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="mdp">Confirmez le mot de passe</label>
+                                <input type="password" class="form-control mt-2" id="inputPassword2" name="inputPassword2" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="mdp">Confirmez le mot de passe</label>
-                            <input type="password" class="form-control mt-2" id="inputPassword2" name="inputPassword2" required>
-                        </div>
+                            <button type="submit" name="btnInscrire" class="btn btn-primary btn-block mt-4">Créer mon compte</button>
 
-                        
+                            <hr class="bg-secondary">
 
-            <button type="submit" name="btnInscrire" class="btn btn-primary btn-block mt-4">Créer mon compte</button>
-
-                        <hr class="bg-secondary">
-
-                        <p class="text-center mt-3">
-                            Déjà un compte ?
-                            <a href="index.php?page=connexion" class="text-info">Connectez-vous</a>
-                        </p>
-                          <p class="text-center mt-3">
-                            <a href="index.php?page=accueil" class="btn btn-outline-light btn-sm">← Retour à l’accueil</a>
-                        </p>
-                    </form>
+                            <p class="text-center mt-3">
+                                Déjà un compte ?
+                                <a href="index.php?page=connexion" class="text-info">Connectez-vous</a>
+                            </p>
+                            <p class="text-center mt-3">
+                                <a href="index.php?page=accueil" class="btn btn-outline-light btn-sm">← Retour à l’accueil</a>
+                            </p>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-
 {% endif %}
+
 {% endblock %}

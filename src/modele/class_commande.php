@@ -89,6 +89,7 @@ class Commande {
             print_r($stmt->errorInfo());
         }
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
     }
 }

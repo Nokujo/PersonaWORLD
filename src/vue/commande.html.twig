@@ -54,6 +54,8 @@
                   {% endfor %}
                 </ul>
               </td>
+              <td>{{ cmd.etatLibelle }}</td>
+
               <td class="text-center">
                 {% if cmd.idEtat == 1 %}
                     <a href="index.php?page=commande&valider={{ cmd.id }}" class="btn btn-sm btn-success mb-1">Valider</a><br>

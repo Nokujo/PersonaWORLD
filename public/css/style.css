@@ -191,6 +191,50 @@
     color: var(--text-primary);
     text-align: center;
   }
+
+  .carte-produit .card {
+  border: none;
+  border-radius: 0.75rem;
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carte-produit .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(93, 74, 255, 0.3);
+}
+
+.carte-produit .card-img-top {
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.carte-produit .card-body {
+  padding: 1rem;
+}
+
+.carte-produit .card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.carte-produit .card-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.carte-produit .card-footer {
+  background-color: transparent;
+  border-top: 1px solid var(--bg-secondary);
+  padding: 0.75rem;
+}
+
   
   .footer {
   background-color: var(--bg-secondary);
