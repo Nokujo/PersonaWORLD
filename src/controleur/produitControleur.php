@@ -54,12 +54,9 @@ function produitControleur($twig, $db) {
 function produitModifControleur($twig, $db) {
     $form = [];
 
-    // Récupération du produit à modifier
     if (isset($_GET['id'])) {
         $m            = new Produit($db);
         $form['prod'] = $m->selectById($_GET['id']);
-
-        // Charge aussi la liste des types
         $typeModel      = new Type($db);
         $form['types']  = $typeModel->select();
     }
@@ -82,11 +79,8 @@ function produitModifControleur($twig, $db) {
            (int)$_POST['quantite']
         );
 
-        // Préparation du retour
         $form['valide']   = $ok;
         $form['message']  = $ok ? 'Produit modifié' : 'Erreur lors de la modification';
-
-        // Recharge le produit + types
         $form['prod']   = $m->selectById($_POST['id']);
         $typeModel      = new Type($db);
         $form['types']  = $typeModel->select();

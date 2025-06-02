@@ -37,7 +37,7 @@ function commandeControleur($twig, $db) {
             WHERE c.idEtat = :etat
             ORDER BY c.dateCommande DESC
             ";
-$stmt = $db->prepare($sql);
+        $stmt = $db->prepare($sql);
         $stmt->execute([':etat' => $filtre]);
         $commandes = $stmt->fetchAll();
     } else {

@@ -38,12 +38,12 @@ function panierControleur($twig, $db){
         // Récupération du client
         $util    = new Utilisateur($db);
        if (!isset($_SESSION['login'])) {
-    $form['valide'] = false;
-    $form['message'] = "Vous devez être connecté pour passer une commande.";
-} else {
-    $unUtil  = $util->selectByEmail($_SESSION['login']);
-    $idUser  = $unUtil['id'] ?? null;
-}
+         $form['valide'] = false;
+            $form['message'] = "Vous devez être connecté pour passer une commande.";
+        } else {
+            $unUtil  = $util->selectByEmail($_SESSION['login']);
+            $idUser  = $unUtil['id'] ?? null;
+        }
 
         $idUser  = $unUtil['id'] ?? null;
 
@@ -91,10 +91,6 @@ function panierControleur($twig, $db){
             $form['message'] = 'Veuillez vous connectez ou créer un compte.';
         }
     }
-
-    
-    
-
     // Récupération des produits si panier non vide
     if (!empty($_SESSION['panier'])) {
         $ids  = array_keys($_SESSION['panier']);
