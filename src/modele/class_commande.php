@@ -71,17 +71,26 @@ class Commande {
     }
 
     public function selectWithProduits($idCommande): array {
-        $sql = "
-        SELECT c.id AS idCommande, c.idUtilisateur, c.dateCommande, c.montant, c.idEtat,
-       u.nom, u.prenom,
-       p.nom AS produitNom, p.prix, p.img, cmp.quantite
+       $sql = "
+                    SELECT 
+                        c.id AS idCommande,
+                        c.dateCommande AS dateCommande,
+                        c.idUtilisateur,
+                        c.montant,
+                        c.idEtat,
+                        u.nom AS clientNom,
+                        u.prenom AS clientPrenom,
+                        p.nom AS produitNom,
+                        p.prix,
+                        p.img,
+                        cmp.quantite
+                    FROM commande c
+                    JOIN utilisateur u ON c.idUtilisateur = u.id
+                    JOIN composer cmp ON cmp.idCommande = c.id
+                    JOIN produits p ON p.id = cmp.idProduit
+                    WHERE c.id = :id
+                ";
 
-            FROM commande c
-            JOIN utilisateur u ON c.idUtilisateur = u.id
-            JOIN composer cmp ON cmp.idCommande = c.id
-            JOIN produits p ON p.id = cmp.idProduit
-            WHERE c.id = :id
-        ";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $idCommande]);
 

@@ -1,7 +1,4 @@
-
-
 <style>
-
   body {
     font-family: 'Arial', sans-serif;
     font-size: 13px;
@@ -30,36 +27,27 @@
     margin-bottom: 30px;
   }
 
-  .facture-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-  }
-
   .logo-container {
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-bottom: 15px;
   }
 
   .logo-container img {
     height: 60px;
   }
 
-  .logo-container .entreprise-nom {
+  .entreprise-nom {
     font-size: 18px;
     font-weight: bold;
     text-transform: uppercase;
   }
 
-  .facture-header .infos {
-    text-align: right;
+  .facture-infos {
     font-size: 14px;
-  }
-
-  .facture-date {
-    color: #555;
+    margin-bottom: 25px;
+    line-height: 1.5;
   }
 
   .facture-client {
@@ -90,14 +78,13 @@
   }
 
   .product-img {
-  height: auto;
-  max-height: 80px;      /* limite raisonnable pour éviter les images trop grandes */
-  width: auto;
-  max-width: 100px;
-  display: block;
-  object-fit: contain;   /* affiche l'image entière sans l’écraser */
-}
-
+    height: auto;
+    max-height: 80px;
+    width: auto;
+    max-width: 100px;
+    display: block;
+    object-fit: contain;
+  }
 
   .facture-total {
     font-weight: bold;
@@ -120,22 +107,19 @@
 <div class="facture">
   <div class="facture-title">Facture</div>
 
-  <div class="facture-header">
-    <div class="logo-container">
-      <img src="../public/img/logo.png" alt="Logo">
-      <div class="entreprise-nom">Persona World</div>
-    </div>
-   <div class="infos">
-  <div><strong>Facture n°<?php echo $detailsCopy[0]['idCommande']; ?></strong></div>
-  <div class="facture-date">Date : <?php echo $detailsCopy[0]['dateCommande']; ?></div>
-</div>
-</div>
+  <div class="logo-container">
+    <img src="../public/img/logo.png" alt="Logo">
+    <div class="entreprise-nom">Persona World</div>
+  </div>
+
+  <div class="facture-infos">
+    <p><strong>Facture n°</strong> <?= $commandeData['idCommande'] ?></p>
+    <p><strong>Date :</strong> <?= date('d/m/Y à H:i', strtotime($commandeData['dateCommande'])) ?></p>
+  </div>
 
   <div class="facture-client">
-    <p><strong>Client :</strong> <?php echo ucfirst($detailsCopy[0]['prenom']) . ' ' . strtoupper($detailsCopy[0]['nom']); ?></p>
-
-    <p><strong>Email :</strong> <?php echo $_SESSION['login']; ?></p>
-
+    <p><strong>Client :</strong> <?= ucfirst($commandeData['clientPrenom']) . ' ' . strtoupper($commandeData['clientNom']) ?></p>
+    <p><strong>Email :</strong> <?= htmlspecialchars($_SESSION['login']) ?></p>
   </div>
 
   <table>
@@ -149,7 +133,7 @@
       </tr>
     </thead>
     <tbody>
-      <?php $total = 0; foreach ($detailsCopy as $ligne):
+      <?php $total = 0; foreach ($produits as $ligne):
         $ligneTotal = $ligne['prix'] * $ligne['quantite'];
         $total += $ligneTotal;
       ?>
