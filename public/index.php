@@ -1,26 +1,6 @@
 <?php
 session_start();
 
-if (isset($_GET['suggestion'])) {
-    require_once '../config/connexion.php';
-    require_once '../src/modele/_classes.php';
-
-    $db = connect($config);
-    $produitModel = new Produit($db);
-
-    $terme = trim($_GET['suggestion']);
-    $resultats = $produitModel->recherche($terme);
-
-    $suggestions = [];
-    foreach ($resultats as $p) {
-        $suggestions[] = ['id' => $p['id'], 'nom' => $p['nom']];
-    }
-
-    header('Content-Type: application/json');
-    echo json_encode($suggestions);
-    exit;
-}
-
 
 require_once '../src/controleur/_controleurs.php';
 require_once '../lib/vendor/autoload.php';

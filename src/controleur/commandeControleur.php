@@ -2,7 +2,7 @@
 function commandeControleur($twig, $db) {
     if (session_status() === PHP_SESSION_NONE) session_start();
 
-    // 🔒 Accès réservé aux admins
+    // Accès réservé aux admins
     if (!isset($_SESSION['role']) || $_SESSION['role'] != 1) {
         header('Location: index.php?page=connexion');
         exit;
@@ -12,14 +12,14 @@ function commandeControleur($twig, $db) {
     $composerModel    = new Composer($db);
     $utilisateurModel = new Utilisateur($db);
 
-    // ✅ Valider une commande
+    // Valider une commande
     if (isset($_GET['valider']) && is_numeric($_GET['valider'])) {
         $commandeModel->updateEtat($_GET['valider'], 2); // 2 = Traitée
         header('Location: index.php?page=commande');
         exit;
     }
 
-    // 🗑️ Supprimer une commande
+    // Supprimer une commande
     if (isset($_GET['supprimer']) && is_numeric($_GET['supprimer'])) {
         $commandeModel->delete($_GET['supprimer']);
         header('Location: index.php?page=commande');

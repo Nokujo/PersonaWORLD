@@ -49,7 +49,7 @@ $detailsCopy = $details; // pour le template
 
     foreach ($details as &$ligne) {
     if (!empty($ligne['img'])) {
-        $ligne['img'] = getImageBase64($ligne['img']); // applique base64 à chaque image
+        $ligne['img'] = getImageBase64($ligne['img']); 
     }
 }
 $detailsCopy = $details;
@@ -78,7 +78,7 @@ try {
     return;
 }
 
-// 📧 Envoi mail (AVANT affichage)
+// Envoi mail (AVANT affichage)
 $mail = new PHPMailer(true);
 
 try {
@@ -106,7 +106,7 @@ $mail->Body    = 'Merci pour votre commande ! Vous trouverez ci-joint votre fact
     error_log("Erreur mail : " . $mail->ErrorInfo);
 }
 
-// ✅ Affiche ensuite le PDF dans le navigateur
+// Affiche ensuite le PDF dans le navigateur
 $pdf->output('facture_' . $idCommande . '.pdf', 'D');
 
 

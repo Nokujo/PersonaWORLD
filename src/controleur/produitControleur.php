@@ -54,7 +54,7 @@ function produitControleur($twig, $db) {
 function produitModifControleur($twig, $db) {
     $form = [];
 
-    // 1) Récupération du produit à modifier
+    // Récupération du produit à modifier
     if (isset($_GET['id'])) {
         $m            = new Produit($db);
         $form['prod'] = $m->selectById($_GET['id']);
@@ -64,7 +64,7 @@ function produitModifControleur($twig, $db) {
         $form['types']  = $typeModel->select();
     }
 
-    // 2) Traitement du formulaire de modification
+    // Traitement du formulaire de modification
     elseif (isset($_POST['btModifier'])) {
         $m = new Produit($db);
 

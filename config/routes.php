@@ -30,11 +30,8 @@ function getPage($db) {
         'ajoutPanier'       => 'ajoutPanierControleur',
         'panier'            => 'panierControleur',
         'commande'          => 'commandeControleur',
-
-        // Commande
         'facture'           => 'factureControleur',
-
-        //Contact 
+        
         'contact'           =>  'contactControleur',
 
     ];

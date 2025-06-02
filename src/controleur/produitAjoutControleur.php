@@ -20,7 +20,7 @@ function produitAjoutControleur($twig, $db): void {
             $ok = $m->insert(
                 $_POST['nom'],
                 $_POST['description'],
-                $imgUrl,                     // ici, on insère directement l’URL
+                $imgUrl,                    
                 $_POST['type'] ?? null,
                 $_POST['prix'],
                 $_POST['quantite']

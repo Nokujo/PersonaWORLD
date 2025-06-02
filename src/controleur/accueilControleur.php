@@ -8,7 +8,7 @@ function accueilControleur($twig, $db) {
     $type = $_GET['type'] ?? null;
 
     if ($type) {
-        $liste = $produitModel->selectByTypeNom($type); // À créer dans Produit.php
+        $liste = $produitModel->selectByTypeNom($type); 
     } else {
         $liste = $produitModel->select();
     }

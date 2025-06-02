@@ -13,7 +13,7 @@ class Produit {
     public function __construct(PDO $db) {
         $this->db = $db;
 
-        // On joint désormais la table type pour récupérer le libellé
+        
         $this->select = $db->prepare("
           SELECT 
             p.id, p.nom, p.description, p.img, p.prix, p.quantite,

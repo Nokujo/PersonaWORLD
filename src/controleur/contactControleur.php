@@ -27,14 +27,9 @@ function contactControleur($twig, $db) {
                 $mail->Password = 'iydn cewu pbzq fsic'; // mot de passe d'application
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
-
-                // ✅ envoi au nom du site (fiable)
                 $mail->setFrom('mustaphachouhani2@gmail.com', 'Persona World');
-                // ✅ réponse vers l'expéditeur réel
                 $mail->addReplyTo($email, "$prenom $nom");
-
                 $mail->addAddress('mustaphachouhani2@gmail.com', 'Mustapha Admin');
-
                 $mail->isHTML(true);
                 $mail->CharSet = 'UTF-8';
                 $mail->Subject = "📩 Nouveau message du site Persona World";

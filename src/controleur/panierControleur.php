@@ -7,17 +7,17 @@ function panierControleur($twig, $db){
     $form  = [];
     $liste = [];
 
-    // ✅ Initialisation panier si absent
+    // Initialisation panier si absent
     if (!isset($_SESSION['panier'])) {
         $_SESSION['panier'] = [];
     }
 
-    // 🗑️ Suppression d’un article
+    // Suppression d’un article
     if (isset($_GET['remove'])) {
         unset($_SESSION['panier'][$_GET['remove']]);
     }
 
-    // 🔄 Mise à jour des quantités
+    // Mise à jour des quantités
     if (isset($_POST['update'])) {
         foreach ($_POST as $k => $v) {
             if (strpos($k, 'q-') === 0) {
@@ -29,13 +29,13 @@ function panierControleur($twig, $db){
         $form['valide']  = true;
     }
 
-    // ✅ Passage de commande
+    // Passage de commande
     if (isset($_POST['placerCommande']) && !empty($_SESSION['panier'])) {
         $montant = $_POST['montant'];
         $date    = (new DateTime('now', new DateTimeZone('Europe/Paris')))
                     ->format('Y-m-d H:i:s');
 
-        // 🔐 Récupération du client
+        // Récupération du client
         $util    = new Utilisateur($db);
        if (!isset($_SESSION['login'])) {
     $form['valide'] = false;
@@ -95,7 +95,7 @@ function panierControleur($twig, $db){
     
     
 
-    // 🧾 Récupération des produits si panier non vide
+    // Récupération des produits si panier non vide
     if (!empty($_SESSION['panier'])) {
         $ids  = array_keys($_SESSION['panier']);
         $prod = new Produit($db);

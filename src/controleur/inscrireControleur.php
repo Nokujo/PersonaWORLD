@@ -53,7 +53,7 @@ function inscrireControleur($twig) {
                         $idgenere
                     ]);
 
-                    // 📧 ENVOI EMAIL CLIENT
+                    // ENVOI EMAIL CLIENT
                     $mail = new PHPMailer(true);
                     $mail->isSMTP();
                     $mail->Host       = 'smtp.gmail.com';
@@ -71,7 +71,7 @@ function inscrireControleur($twig) {
 
                     $mail->send();
 
-                    // 📧 ENVOI EMAIL ADMIN
+                    // ENVOI EMAIL ADMIN
                     $adminMail = new PHPMailer(true);
                     $adminMail->isSMTP();
                     $adminMail->Host       = 'smtp.gmail.com';

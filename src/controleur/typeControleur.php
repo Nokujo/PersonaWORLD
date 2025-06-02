@@ -28,19 +28,19 @@ if (session_status() === PHP_SESSION_NONE) {
         exit;
     }
 
-    // 3) Message de retour suppression
+    // Message de retour suppression
     if (isset($_GET['etat'])) {
         $form['etat'] = ($_GET['etat'] === 'true');
     }
 
-    // 4) Récupération et affichage de la liste des types
+    // Récupération et affichage de la liste des types
     $liste = $m->select();
     echo $twig->render('type.html.twig', [
         'form'  => $form,
         'liste' => $liste
     ]);
 
-    // 0) Ajout d’un nouveau type
+    // Ajout d’un nouveau type
 if (isset($_POST['btAjouter']) && !empty($_POST['libelle'])) {
     $libelle = trim($_POST['libelle']);
     $etat = $m->insert($libelle);
@@ -66,7 +66,7 @@ function typeModifControleur($twig, $db) {
         $ok           = $m->update($id, $libelle);
         $form['valide']   = $ok;
         $form['message']  = $ok ? 'Type modifié' : 'Erreur lors de la modification';
-        // Rechargement pour afficher la valeur à jour
+     
         $form['type']     = $m->selectById($id);
     }
     // Aucun id ni soumission

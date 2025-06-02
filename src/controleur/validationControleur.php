@@ -21,12 +21,12 @@ function validationControleur($twig, $db) {
         $user = $stmt->fetch();
 
         if ($user) {
-            // ✅ Mise à jour de l’état de validation
+            // Mise à jour de l’état de validation
             $update = $db->prepare("UPDATE utilisateur SET valider = 1 WHERE email = :email");
             $update->bindValue(':email', $email);
             $update->execute();
 
-            // 📧 Envoi mail au client
+            // Envoi mail au client
             $mail = new PHPMailer(true);
 
             try {
